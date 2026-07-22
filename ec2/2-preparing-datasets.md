@@ -12,18 +12,30 @@
 ### 1. EC2 생성하기 ###
 
 데이터 준비 단계에서는 네트워크 대역폭과 디스크 성능이 좋은 CPU 인스턴스가 필요하다.
-* 인스턴스: m7g.4xlarge.
+* 인스턴스: m7g.4xlarge
 * 스토리지: 임시 스크래치용 로컬 NVMe 있는 타입이면 좋고, 없으면 EBS gp3 500GB~1TB.
 * S3 버킷으로 다운로드 받은 파일을 업로드하므로 S3 쓰기 권한(vlm-s3-access) 이 필요하다.
 
 ```
+AMI_ID=$(aws ssm get-parameter \
+  --region $REGION \
+  --name /aws/service/deeplearning/ami/x86_64/base-oss-nvidia-driver-gpu-ubuntu-22.04/latest/ami-id \
+  --query 'Parameter.Value' --output text)
+echo $AMI_ID
+
 aws ec2 run-instances \
+  --region $REGION \
+  --image-id $AMI_ID \
+  --instance-type m7g.4xlarge \
+  --security-group-ids $SG_ID \
+  --subnet-id $SUBNET_ID \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":600,"VolumeType":"gp3","Throughput":500,"Iops":6000,"DeleteOnTermination":true}}]' \
   --iam-instance-profile Name=vlm-ec2-profile \
-  --instance-type m7i.4xlarge \
-  --image-id <ubuntu-22.04-ami> \
-  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":1000,"VolumeType":"gp3"}}]' \
-  ... (subnet, security-group 등)
+  --instance-initiated-shutdown-behavior terminate \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=internvl3-infer}]' \
+  --count 1
 ```
+
 인스턴스로 접속한 후 ffmpeg 및 hf 패키지를 설치한다. 
 ```
 sudo apt-get update && sudo apt-get install -y python3-pip ffmpeg
