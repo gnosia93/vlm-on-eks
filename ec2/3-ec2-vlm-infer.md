@@ -236,8 +236,9 @@ INFO 07-22 03:10:42 weight_utils.py:251] Using model weights format ['*.safetens
 (VllmWorkerProcess pid=485) INFO 07-22 03:10:42 weight_utils.py:251] Using model weights format ['*.safetensors']
 model-00002-of-00033.safetensors:  99%|████████████████████████████████████████████████████████████████████████████████████████████████▊ | 4.87G/4.94G [00:31<00:04, 15.7MB/s
 ```
-hf 의 경우 익명 연결시 쓰로틀링이 걸리게 되는데 이를 회피하기 아래와 같이 두가지 파라미터를 적용한다. 이렇게 하더라도 여전히 느릴 수 있으니 가중치를 다운로드 받은 후 S3 에 저장해 놓는 것이 유리하다. 
-```
--e HF_HUB_ENABLE_HF_TRANSFER=1
--e HF_TOKEN=hf_xxxxxxxxxxxx
-```  
+> [!TIP]
+> hf 의 경우 익명 연결시 쓰로틀링이 걸리게 되는데 이를 회피하기 아래와 같이 두가지 파라미터를 적용한다. 이렇게 하더라도 여전히 느릴 수 있으니 가중치를 다운로드 받은 후 S3 에 저장해 놓는 것이 유리하다. 
+> ```
+> -e HF_HUB_ENABLE_HF_TRANSFER=1
+> -e HF_TOKEN=hf_xxxxxxxxxxxx
+> ```  
