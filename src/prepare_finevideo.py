@@ -5,13 +5,18 @@ import json
 import polars as pl
 import boto3
 from huggingface_hub import hf_hub_download
+from huggingface_hub import HfApi
+
+api = HfApi()
+files = api.list_repo_files("HuggingFaceFV/finevideo", repo_type="dataset")
+shards = sorted(f for f in files if f.startswith("data/train-") and f.endswith(".parquet"))
 
 # ---- 설정 ----
 BUCKET   = os.environ["BUCKET"]              # export BUCKET=your-bucket
 REGION   = os.environ.get("REGION", "ap-northeast-2")
 CATEGORY = "Sports"                          # 타깃 상위 카테고리
 PREFIX   = "finevideo/sports"                # S3 최상위 경로
-N_SHARDS = 1357
+N_SHARDS = len(shards)
 MAX_VIDEOS = None                            # 상한 두려면 정수, 전체면 None
 
 s3 = boto3.client("s3", region_name=REGION)
