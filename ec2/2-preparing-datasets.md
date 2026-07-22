@@ -16,6 +16,11 @@ export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export REGION=ap-northeast-2
 export SG_ID=$SG_ID
 export SUBNET_ID=$SUBNET_ID
+
+echo "ACCOUNT_ID: $ACCOUNT_ID"
+echo "REGION: $REGION"
+echo "SG_ID: $SG_ID"
+echo "SUBNET_ID: $SUBNET_ID" 
 ```
 
 데이터 준비 단계에서는 네트워크 대역폭과 디스크 성능이 좋은 CPU 인스턴스가 필요하다.
