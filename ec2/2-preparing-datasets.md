@@ -1,4 +1,4 @@
-## 데이터셋 / 모델 가중치 다운로드 ##
+## 데이터셋 준비 ##
 
 본 워크샵에서는 FineVideo 데이터셋을 허깅페이스로 부터 다운로드 받아서 S3 에 저장합니다.
 FineVideo는 약 43,000개의 영상, 총 3,400시간 분량으로 구성된 대규모 영상 데이터셋으로, 전체 용량은 수백 GB에서 TB에 이릅니다. 데이터는 parquet 포맷으로 저장되어 있으며, 그 안에는 실제 영상인 mp4 파일과 메타데이터인 json이 쌍을 이루어 담겨 있습니다. 각 샘플의 JSON에는 FineVideo 자체 택소노미(taxonomy)를 기반으로 한 카테고리 정보(예: content_parent_category, content_fine_category)와 함께 원본 YouTube 메타데이터가 포함되어 있습니다. 다만 이 데이터셋은 게이트(gated) 데이터셋이기 때문에, 먼저 Hugging Face 페이지에서 CC 라이선스에 동의해야 하며, 다운로드 시에는 HF_TOKEN이 필요합니다.
