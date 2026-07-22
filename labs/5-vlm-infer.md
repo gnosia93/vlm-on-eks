@@ -1,5 +1,49 @@
 ### 1. 아키텍처 개요 ###
 
+```
+flowchart TB
+    subgraph S3["Amazon S3 (모든 상태 저장)"]
+        MANIFEST["input/manifest.jsonl<br/>이미지 + 프롬프트 목록"]
+        IMAGES["input/images/...<br/>원본 이미지"]
+        WEIGHTS["models/InternVL3-78B/<br/>모델 가중치"]
+        SHARDS["output/.../shards/<br/>shard-00000.jsonl<br/>shard-00001.jsonl"]
+        TRAIN["output/.../train.jsonl<br/>최종 학습 데이터"]
+    end
+
+    subgraph W0["EC2 g7e - 샤드 0"]
+        direction TB
+        L0["가중치 → 로컬 NVMe 동기화"]
+        M0["InternVL3-78B<br/>GPU x4 (TP=4) / vLLM"]
+        P0["줄번호 % 2 == 0 담당<br/>배치 추론"]
+        S0["끝나면 자동 종료"]
+        L0 --> M0 --> P0 --> S0
+    end
+
+    subgraph W1["EC2 g7e - 샤드 1"]
+        direction TB
+        L1["가중치 → 로컬 NVMe 동기화"]
+        M1["InternVL3-78B<br/>GPU x4 (TP=4) / vLLM"]
+        P1["줄번호 % 2 == 1 담당<br/>배치 추론"]
+        S1["끝나면 자동 종료"]
+        L1 --> M1 --> P1 --> S1
+    end
+
+    MERGE["병합 작업 (merge)<br/>shard-* 취합 + 중복/에러 정리"]
+
+    MANIFEST -->|"매니페스트 읽기"| P0
+    MANIFEST -->|"매니페스트 읽기"| P1
+    IMAGES -->|"이미지 다운로드"| P0
+    IMAGES -->|"이미지 다운로드"| P1
+    WEIGHTS -->|"가중치 다운로드"| L0
+    WEIGHTS -->|"가중치 다운로드"| L1
+
+    P0 -->|"결과 주기 업로드"| SHARDS
+    P1 -->|"결과 주기 업로드"| SHARDS
+
+    SHARDS -->|"모든 샤드 완료 후"| MERGE
+    MERGE -->|"최종 저장"| TRAIN
+```
+
 "S3에서 읽고 → GPU에서 추론하고 → S3에 쓴다"는 아주 단순한 파이프라인이다.
 
 * 1단계 — 입력 준비 (S3) S3 버킷에 세 종류를 올려둡니다. 처리할 대상 목록인 manifest.jsonl(각 줄이 이미지 하나 + 프롬프트), 실제 이미지 파일들, 그리고 InternVL3-78B 모델 가중치입니다. 모든 입력과 출력이 S3 한 곳에 모여 있어서 인스턴스는 상태를 안 가져도 됩니다.
