@@ -169,7 +169,7 @@ aws s3 ls $BUCKET/finevideo/sports/
 2026-07-23 01:19:20       9174 manifest.jsonl
 ```
 ```
-aws s3 cp $BUCKET/finevideo/sports/manifest.json - | jq .
+aws s3 cp s3://$BUCKET/finevideo/sports/manifest.json - | jq .
 ```
 [결과]
 ```
