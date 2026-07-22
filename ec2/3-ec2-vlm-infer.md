@@ -162,6 +162,8 @@ sudo chown ubuntu:ubuntu /opt/dlami/nvme/hf-cache
 ```
 
 docker 이미지로 인퍼런스를 실행한다. 이때 huggingface 의 모델은 호스트 경로 /opt/dlami/nvme/hf-cache(NVME 인스턴스 스토어) 에 저장된다.
+* -v ~/.cache/huggingface:... 는 78B 가중치(약 150GB)를 한 번 받아 캐시해두는 위치로 처음 실행시 HuggingFace로 부터 다운로드 받는다.
+* -w /work 작업 디렉토리
 ```
 docker run --rm --gpus all --shm-size=16g \
   -v $(pwd):/work -w /work \
@@ -169,9 +171,30 @@ docker run --rm --gpus all --shm-size=16g \
   vllm/vllm-openai:v0.6.6.post1 \
   python simple_infer.py
 ```
+[결과]
+```
+v0.6.6.post1: Pulling from vllm/vllm-openai
+aece8493d397: Pull complete
+c5f00d6d0d62: Download complete
+12cd4d19752f: Pull complete
+3d97a47c3c73: Pull complete
+4f4fb700ef54: Download complete
+850a3ed97a0d: Downloading [==================================================>]  3.545GB/3.545GB
+71729f03dad2: Download complete
+da5a484f9d74: Pull complete
+45f7ea5367fe: Pull complete
+f64334cb5400: Download complete
+be8001762246: Downloading [===================================>               ]  305.1MB/427.2MB
+117e97d3740c: Pull complete
+49ce6df6e942: Download complete
+87b4097c53c8: Pull complete
+```
 
-* -v ~/.cache/huggingface:... 는 78B 가중치(약 150GB)를 한 번 받아 캐시해두는 위치로 처음 실행시 HuggingFace로 부터 다운로드 받는다.
-* -w /work 작업 디렉토리
+
+
+
+
+
 
 * 도커 없이 직접 실행하려면:
 ```
