@@ -54,7 +54,10 @@ nvidia-smi          # RTX PRO 6000 4장이 보이면 정상
 
 ### 2.소스 다운로드 ###
 
-
+```
+git clone https://github.com/gnosia93/vlm-on-eks.git
+cd vlm-on-eks/src
+```
 
 
 
