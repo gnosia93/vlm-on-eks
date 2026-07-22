@@ -361,3 +361,8 @@ find /opt/dlami/nvme/hf-cache/hub -name "*.safetensors" | wc -l
 aws s3 sync /opt/dlami/nvme/hf-cache/ s3://${BUCKET}/hf-cache/
 ```
 다음에 복원하면 같은 hub/ 구조로 내려받아지고, HF_HOME이나 캐시 마운트만 맞으면 vLLM이 재다운로드 없이 바로 인식한다.
+
+## 인스턴스 삭제 ##
+```
+aws ec2 terminate-instances --instance-ids i-0123456789abcdef0
+```
