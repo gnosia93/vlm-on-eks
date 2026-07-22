@@ -162,7 +162,7 @@ sudo chown ubuntu:ubuntu /opt/dlami/nvme/hf-cache
 ```
 
 docker 이미지로 인퍼런스를 실행한다. 이때 huggingface 의 모델은 호스트 경로 /opt/dlami/nvme/hf-cache(NVME 인스턴스 스토어) 에 저장된다.
-* -v ~/.cache/huggingface:... 는 78B 가중치(약 150GB)를 한 번 받아 캐시해두는 위치로 처음 실행시 HuggingFace로 부터 다운로드 받는다.
+* -v /opt/dlami/nvme/hf-cache:/root/.cache/huggingface 는 78B 가중치(약 150GB)를 다운로드 받아 캐시해두는 위치로, /opt/dlami/nvme/hf-cache 는 호스트 경로이고 /root/.cache/huggingface 는 컨테이너 내부 경로이다. 즉 컨테이너 내부에서 hf 로 연결하여 가웅치를 다운로드 받으면 호스트 경로 /opt/dlami/nvme/hf-cache 에 저장된다. 
 * -w /work 작업 디렉토리
 ```
 docker run --rm -it --gpus all --shm-size=16g \
