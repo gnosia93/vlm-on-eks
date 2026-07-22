@@ -35,12 +35,13 @@ aws ec2 run-instances \
 * CPU 쿼터: 계정의 "Running On-Demand G instances" 쿼터가 부족하면 생성이 실패할 수 있으니, Service Quotas 를 확인한다. 
 * 용량 부족(InsufficientInstanceCapacity): 최신 GPU 인스턴스의 경우 AZ에 물량이 없을 수 있다. 이럴 땐 AZ를 바꾸거나 온디맨드 용량 예약(ODCR)을 활용한다.
 
-생성된 인스턴스의 퍼블릭 IP 를 확인한다. 
-```
-aws ec2 describe-instances --region $REGION \
-  --filters "Name=tag:Name,Values=internvl3-infer" "Name=instance-state-name,Values=running" \
-  --query 'Reservations[].Instances[].PublicIpAddress' --output text
-```
+> [!TIP]
+> 생성된 인스턴스의 퍼블릭 IP 를 확인한다. 
+> ```
+> aws ec2 describe-instances --region $REGION \
+>   --filters "Name=tag:Name,Values=internvl3-infer" "Name=instance-state-name,Values=running" \
+>   --query 'Reservations[].Instances[].PublicIpAddress' --output text
+> ```
 
 ### 2. 인스턴스 접속하기 ####
 system manager 를 이용하여 인스턴스에 접속 한다. 클라이이언트가 맥 os 인 경우 플러그인을 설치가 필요하다. 
