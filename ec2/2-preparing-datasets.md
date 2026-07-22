@@ -106,37 +106,7 @@ cd vlm-on-eks/src
 python3 inspect_pl.py
 ```
 [결과]
-```
-shape: (5, 6)
-┌───────────────┬──────────────────────┬─────────────────────────────────┬──────────┬────────────┬─────────────────────────────────┐
-│ parent_cat    ┆ fine_cat             ┆ title                           ┆ duration ┆ resolution ┆ yt_title                        │
-│ ---           ┆ ---                  ┆ ---                             ┆ ---      ┆ ---        ┆ ---                             │
-│ str           ┆ str                  ┆ str                             ┆ i64      ┆ str        ┆ str                             │
-╞═══════════════╪══════════════════════╪═════════════════════════════════╪══════════╪════════════╪═════════════════════════════════╡
-│ Education     ┆ Engineering Projects ┆ Heavy Equipment Operators Cour… ┆ 208      ┆ 640x360    ┆ Training Heavy Equipment Opera… │
-│ Entertainment ┆ Game Reviews         ┆ Ircha's Game Reviews & Impress… ┆ 604      ┆ 640x360    ┆ Forspoken after 100% Completio… │
-│ Sports        ┆ Career Highlights    ┆ Life at the Academy             ┆ 268      ┆ 640x360    ┆ Life at the Academy - Queensla… │
-│ Lifestyle     ┆ Recipe Videos        ┆ Vendakka MoruCurry Recipe       ┆ 410      ┆ 626x360    ┆ Vendakka Moru Curry, Ladysfing… │
-│ Lifestyle     ┆ Fashion Hauls        ┆ Exploration of Goyard's Market… ┆ 48       ┆ 270x480    ┆ The secrets behind the luxurio… │
-└───────────────┴──────────────────────┴─────────────────────────────────┴──────────┴────────────┴─────────────────────────────────┘
-shape: (9, 2)
-┌──────────────────────┬─────┐
-│ cat                  ┆ len │
-│ ---                  ┆ --- │
-│ str                  ┆ u32 │
-╞══════════════════════╪═════╡
-│ Entertainment        ┆ 8   │
-│ Education            ┆ 7   │
-│ Science & Technology ┆ 5   │
-│ Lifestyle            ┆ 4   │
-│ Hobbies & Interests  ┆ 3   │
-│ Sports               ┆ 2   │
-│ News & Politics      ┆ 2   │
-│ Automotive           ┆ 1   │
-│ Art & Creativity     ┆ 1   │
-└──────────────────────┴─────┘
-```
-
+![](https://github.com/gnosia93/vlm-on-eks/blob/main/images/inspect_pl.png)
 
 
 ### 5. 다운로드 및 S3 적재 ###
