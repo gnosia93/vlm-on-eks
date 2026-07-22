@@ -168,6 +168,18 @@ aws s3 ls $BUCKET/finevideo/sports/
 2026-07-23 01:19:20         98 manifest.json
 2026-07-23 01:19:20       9174 manifest.jsonl
 ```
+```
+aws s3 cp $BUCKET/finevideo/sports/manifest.json - | jq .
+```
+[결과]
+```
+{
+  "category": "Sports",
+  "prefix": "finevideo/sports",
+  "total_videos": 25,
+  "n_shards": 10
+}
+```
 
 파이프라인 후속 단계(추론/파인튜닝)가 쉽게 참조하도록 카테고리별로 나눠서 저장된다. 여러 카테고리가 있으나 본 워크샵에서는 sports 카테고리 데이터만 받아서 S3 에 저장하였다.
 ```
