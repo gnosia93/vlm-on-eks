@@ -63,8 +63,10 @@ brew install --cask session-manager-plugin
 
 접속할 인스턴스를 조회하고, system manager 를 이용하여 로그인한다.  
 ```
-INSTANCE=$(aws ssm describe-instance-information \
-  --query "InstanceInformationList[].InstanceId" --region $REGION --output text)
+INSTANCE=$(aws ssm describe-instance-information --region $REGION \
+  --filters "Key=tag:Name,Values=data-preprocessing" \
+  --query "InstanceInformationList[].InstanceId" \
+  --output text)
 echo "INSTANCE: $INSTANCE"
 
 aws ssm start-session --target $INSTANCE --region $REGION
