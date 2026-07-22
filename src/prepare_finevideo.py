@@ -9,7 +9,7 @@ from huggingface_hub import hf_hub_download, HfApi
 api = HfApi()
 files = api.list_repo_files("HuggingFaceFV/finevideo", repo_type="dataset")
 shards = sorted(f for f in files if f.startswith("data/train-") and f.endswith(".parquet"))
-shards = shards[:10]                         # 워크샵이므로, 앞 10개 샤드만 다운로드 한다.
+shards = shards[:10]                         # 워크샵이므로, 앞 10개 샤드만 다운로드
 
 # ---- 설정 ----
 BUCKET   = os.environ["BUCKET"]              # export BUCKET=your-bucket
@@ -39,6 +39,8 @@ def safe_id(fname: str, shard: int, idx: int) -> str:
 
 def main():
     total = 0
+    records = []                             # 개별 영상 엔트리 누적 (manifest.jsonl 용)
+
     for shard_idx, shard_file in enumerate(shards):
         # 샤드 단위 재개: done 마커 있으면 통째로 스킵
         done_key = f"{PREFIX}/_done/shard-{shard_idx:05d}"
@@ -72,8 +74,24 @@ def main():
                 continue
 
             s3_put(vkey, row["mp4"], "video/mp4")
-            meta = json.dumps(row["json"], ensure_ascii=False, default=str).encode("utf-8")
-            s3_put(mkey, meta, "application/json")
+            m = row["json"]
+            s3_put(mkey, json.dumps(m, ensure_ascii=False, default=str).encode("utf-8"),
+                   "application/json")
+
+            # manifest.jsonl 엔트리 (S3 위치 + 출처 정보)
+            records.append({
+                "video_id":     vid,
+                "category":     CATEGORY,
+                "fine_category": m.get("content_fine_category"),
+                "video_key":    vkey,
+                "metadata_key": mkey,
+                "channel":      m.get("youtube_channel"),
+                "title":        m.get("youtube_title"),
+                "upload_date":  m.get("youtube_upload_date"),
+                "duration":     m.get("duration_seconds"),
+                "resolution":   m.get("resolution"),
+            })
+
             n += 1
             total += 1
             if MAX_VIDEOS and total >= MAX_VIDEOS:
@@ -93,12 +111,16 @@ def main():
             print("MAX_VIDEOS 도달, 종료")
             break
 
-    # 매니페스트
-    manifest = {"category": CATEGORY, "prefix": PREFIX,
-                "total_videos": total, "n_shards": N_SHARDS}
+    # 개별 영상 목록: JSONL (한 줄에 영상 하나)
+    jsonl = "\n".join(json.dumps(r, ensure_ascii=False) for r in records)
+    s3_put(f"{PREFIX}/manifest.jsonl", jsonl.encode("utf-8"), "application/x-ndjson")
+
+    # 요약도 함께 저장
+    summary = {"category": CATEGORY, "prefix": PREFIX,
+               "total_videos": total, "n_shards": N_SHARDS}
     s3_put(f"{PREFIX}/manifest.json",
-           json.dumps(manifest, indent=2, ensure_ascii=False).encode(), "application/json")
-    print("done:", manifest)
+           json.dumps(summary, indent=2, ensure_ascii=False).encode(), "application/json")
+    print("done:", summary)
 
 if __name__ == "__main__":
     main()
