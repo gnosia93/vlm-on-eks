@@ -1,7 +1,7 @@
 #### 1. 환경설정 ####
 ```
 export REGION=ap-northeast-2
-export AZ=ap-northeast-2a
+export AZ=ap-northeast-2b
 ```
 
 #### 2. VPC 생성하기 ####
