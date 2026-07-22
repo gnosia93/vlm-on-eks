@@ -12,8 +12,8 @@
 ### 1. EC2 생성하기 ###
 
 ```
-export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export REGION=ap-northeast-2
+export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export SG_ID=$(aws ec2 describe-security-groups --region $REGION \
   --filters "Name=group-name,Values=vlm-sg" \
   --query "SecurityGroups[].GroupId" \
@@ -23,8 +23,8 @@ export SUBNET_ID=$(aws ec2 describe-subnets --region $REGION \
   --query "Subnets[0].SubnetId" \
   --output text)
 
-echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "REGION: $REGION"
+echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "SG_ID: $SG_ID"
 echo "SUBNET_ID: $SUBNET_ID" 
 ```
