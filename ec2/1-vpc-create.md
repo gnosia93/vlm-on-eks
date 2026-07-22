@@ -1,4 +1,6 @@
-#### 1. 환경설정 ####
+## VPC 생성하기 ##
+
+### 1. 환경설정 ###
 ```
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export REGION=ap-northeast-2
@@ -6,7 +8,7 @@ export AZ=ap-northeast-2b
 export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
 ```
 
-#### 2. VPC 생성하기 ####
+### 2. VPC 생성 ###
 ```
 VPC_ID=$(aws ec2 create-vpc \
   --region $REGION \
@@ -21,7 +23,7 @@ aws ec2 modify-vpc-attribute --region $REGION --vpc-id $VPC_ID --enable-dns-supp
 aws ec2 modify-vpc-attribute --region $REGION --vpc-id $VPC_ID --enable-dns-hostnames
 ```
 
-#### 3. 인터넷 게이트웨이 생성 #### 
+### 3. 인터넷 게이트웨이 생성 ### 
 ```
 IGW_ID=$(aws ec2 create-internet-gateway \
   --region $REGION \
@@ -34,7 +36,7 @@ aws ec2 attach-internet-gateway --region $REGION \
   --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
 ```
 
-#### 4. 퍼블릭 서브넷 생성 ####
+### 4. 퍼블릭 서브넷 생성 ###
 ```
 SUBNET_ID=$(aws ec2 create-subnet \
   --region $REGION \
@@ -51,7 +53,7 @@ aws ec2 modify-subnet-attribute --region $REGION \
   --subnet-id $SUBNET_ID --map-public-ip-on-launch
 ```
 
-#### 5. 라우팅 테이블 (인터넷 경로 추가) ####
+### 5. 라우팅 테이블 (인터넷 경로 추가) ###
 ```
 RTB_ID=$(aws ec2 create-route-table \
   --region $REGION \
@@ -72,7 +74,7 @@ aws ec2 associate-route-table --region $REGION \
   --route-table-id $RTB_ID --subnet-id $SUBNET_ID
 ```
 
-#### 6. 보안 그룹 (SSH 허용) ####
+### 6. 보안 그룹 (SSH 허용) ###
 ```
 SG_ID=$(aws ec2 create-security-group \
   --region $REGION \
@@ -92,7 +94,7 @@ aws ec2 authorize-security-group-ingress --region $REGION \
   --protocol tcp --port 22 --cidr ${MY_IP}/32
 ```
 
-#### 7. S3 버킷 생성 ####
+### 7. S3 버킷 생성 ###
 ```
 echo "BUCKET=$BUCKET"
 
@@ -102,7 +104,7 @@ aws s3api create-bucket \
   --create-bucket-configuration LocationConstraint=$REGION
 ```
 
-#### 8. 인스턴스 프로파일 생성 ####
+### 8. 인스턴스 프로파일 생성 ###
 ```
 cat > trust-policy.json <<'EOF'
 {
@@ -156,8 +158,7 @@ aws iam attach-role-policy \
   --policy-arn arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
 ```
 
-
-#### 8. 결과정리 ####
+### 9. 결과정리 ###
 ```
 echo "VPC_ID=$VPC_ID"
 echo "SUBNET_ID=$SUBNET_ID   (--subnet-id 에 사용)"
