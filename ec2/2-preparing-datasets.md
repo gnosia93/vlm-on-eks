@@ -10,7 +10,7 @@
 > CC 라이선스 영상이라 재배포/저장 시 원본 라이선스와 저작자 표시(attribution) 조건을 지켜야 하는데, JSON의 provenance 필드를 함께 S3에 저장해두면 나중에 출처 추적이 된다.
 
 ### 1. hf 토큰 발급 ###
-
+* https://huggingface.co/ 로 접속하여 
 * huggingface.co/settings/tokens로 이동하여 우측 상단 프로필 → Settings → Access Tokens 경로로 간다.
 * New token (또는 Create new token) 클릭하여 Read 타입의 토큰을 발급 받는다. 
 
