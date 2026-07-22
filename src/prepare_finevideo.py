@@ -9,6 +9,7 @@ from huggingface_hub import hf_hub_download, HfApi
 api = HfApi()
 files = api.list_repo_files("HuggingFaceFV/finevideo", repo_type="dataset")
 shards = sorted(f for f in files if f.startswith("data/train-") and f.endswith(".parquet"))
+shards = shards[:10]                         # 워크샵이므로, 앞 10개 샤드만 다운로드 한다.
 
 # ---- 설정 ----
 BUCKET   = os.environ["BUCKET"]              # export BUCKET=your-bucket
