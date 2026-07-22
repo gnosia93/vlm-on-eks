@@ -17,6 +17,12 @@ CMD ["python", "/app/src/run_worker.py"]
 ```
 
 
+
+Indexed Job은 completion 인덱스마다 새 파드가 뜨는데, 78B는 로딩만 몇 분씩 걸린다. 
+g7e에서 TP=4 파드 2대 동시 실행 구조로 completions를 잘게 쪼개지 않고 2로 설정한다. completions=8, parallelism=2로 설정하면 파드가 샤드 하나 끝낼 때마다 새 파드가 뜨면서 모델을 매번 다시 로드하기 때문이다. 그래서 completions=2 = parallelism=2 = NUM_SHARDS=2로 맞춰, 각 파드가 딱 한 번 로드하고 자기 절반을 끝까지 처리하게 한다. 
+파드가 죽더라도 resume 로직이 이어서 처리하게 된다. 
+가중치는 S3 에 저장한 후 initContainer를 이용하여 파드 실행시 S3 로 부터 로컬 NVMe(s5cmd)로 복사한다.
+
 * vlm-batch-config.yaml
 ```
 apiVersion: v1
@@ -141,4 +147,12 @@ spec:
             sizeLimit: 24Gi     # TP=4 프로세스 간 통신용
 ```
 
+#### 이 구성의 동작 요약 ####
+* 노드: g7e.24xlarge(96GB×4) 2대. podAntiAffinity로 파드를 한 대씩 분산.
+* 각 파드: initContainer가 S3 가중치를 로컬 NVMe로 sync → worker가 TP=4로 한 번만 로드 → 전체 데이터의 절반(인터리브 샤드)을 배치 처리 → 128건마다 S3에 결과 업로드.
+* 완료 후 merge-job.yaml 실행 → s3://.../output/run-.../train.jsonl.
+* 한 가지 확인할 점: emptyDir가 로컬 NVMe에 잡히려면 해당 노드그룹의 kubelet ephemeral storage가 NVMe 인스턴스 스토어에 마운트돼 있어야 합니다. AMI/노드그룹에서 NVMe를 자동 마운트하지 않는 경우엔 hostPath로 NVMe 마운트 경로(예: /mnt/nvme)를 직접 물리는 방식으로 바꾸면 됩니다. 노드그룹이 NVMe를 어떻게 잡고 있는지 알려주시면 그 부분까지 맞춰드릴게요.
 
+```
+또 하나, completions=2면 낙오자(한 파드만 늦게 끝나는 경우) 대응이 거칠어질 수 있어요. 데이터가 아주 크고 처리 시간이 길다면, 모델 재로딩을 감수하고 completions를 늘리는 대신 가중치를 로컬에 미리 받아두고 로딩을 캐시하는 절충도 가능한데, 필요하면 그 방식도 설명해드릴게요.
+```
