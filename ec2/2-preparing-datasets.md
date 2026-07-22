@@ -204,5 +204,7 @@ sudo mkdir -p /mnt/data
 sudo chown ubuntu:ubuntu /mnt/data
 
 hf download OpenGVLab/InternVL3-78B --local-dir /mnt/data/internvl3-78b
+
+echo "model weight loading in $BUCKET"
 aws s3 sync /mnt/data/internvl3-78b/ s3://${BUCKET}/models/internvl3-78b/
 ```
