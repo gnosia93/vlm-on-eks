@@ -28,12 +28,14 @@ export SUBNET_ID=$(aws ec2 describe-subnets --region $REGION \
   --filters "Name=tag:Name,Values=vlm-public-subnet" \
   --query "Subnets[0].SubnetId" \
   --output text)
+export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
 
 echo "\n-------------------------------------"
 echo "REGION: $REGION"
 echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "SG_ID: $SG_ID"
 echo "SUBNET_ID: $SUBNET_ID"
+echo "BUCKET: $BUCKET"
 ```
 
 데이터 준비 단계에서는 네트워크 대역폭과 디스크 성능이 좋은 CPU 인스턴스가 필요하다.
