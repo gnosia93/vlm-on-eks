@@ -1,7 +1,7 @@
 """InternVL3-78B S3 배치 인퍼런스 - 워커 통합본.
 
 사용법:
-  python main.py
+  python job_infer.py
 
 동작:
   - S3에서 매니페스트/이미지를 읽어 자기 샤드만 InternVL3-78B로 추론
