@@ -1,7 +1,7 @@
 """S3의 shard-*.jsonl 전부를 취합해 train.jsonl로 S3에 저장 (독립 실행).
 
 사용법:
-  python merge.py
+  python job_merge.py
 
 - id 기준 중복 제거(마지막 우선)
 - error 레코드 분리(errors.jsonl)
