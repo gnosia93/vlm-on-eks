@@ -80,6 +80,12 @@ aws iam add-role-to-instance-profile \
   --instance-profile-name vlm-ec2-profile \
   --role-name vlm-ec2-role
 ```
+ssh 대신 system manager 로 접속하기 위해서 AmazonSSMManagedInstanceCore 정책을 추가한다.  
+```
+aws iam attach-role-policy \
+  --role-name vlm-ec2-role \
+  --policy-arn arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+```
 
 
 #### 5) 인스턴스 생성 ####
