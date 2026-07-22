@@ -169,4 +169,12 @@ spec:
 또 하나, completions=2면 낙오자(한 파드만 늦게 끝나는 경우) 대응이 거칠어질 수 있어요. 데이터가 아주 크고 처리 시간이 길다면, 모델 재로딩을 감수하고 completions를 늘리는 대신 가중치를 로컬에 미리 받아두고 로딩을 캐시하는 절충도 가능한데, 필요하면 그 방식도 설명해드릴게요.
 ```
 
+#### 배포하기 ####
+```
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/serviceaccount.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/job.yaml
+```
+
 ### 5. 실행 및 결과 확인 ###
