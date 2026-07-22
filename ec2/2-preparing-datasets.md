@@ -199,8 +199,10 @@ aws s3 cp s3://$BUCKET/finevideo/sports/manifest.json - | jq .
 
 허깅페이스 cli 로 OpenGVLab/InternVL3-78B 모델의 가중치를 다운로드 받고, S3 로 업로드 한다. 
 ```
-huggingface-cli download OpenGVLab/InternVL3-78B \
-  --local-dir /mnt/data/internvl3-78b
+export PATH=$PATH:/home/ubuntu/.local/bin
+sudo mkdir -p /mnt/data
+sudo chown ubuntu:ubuntu /mnt/data
 
+hf download OpenGVLab/InternVL3-78B --local-dir /mnt/data/internvl3-78b
 aws s3 sync /mnt/data/internvl3-78b/ s3://${BUCKET}/models/internvl3-78b/
 ```
