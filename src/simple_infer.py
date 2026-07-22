@@ -46,9 +46,11 @@ def build_prompt(tokenizer, prompt: str) -> str:
 def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained(MODEL, trust_remote_code=True)
 
+    num_gpus = torch.cuda.device_count()    
     llm = LLM(
         model=MODEL,
-        tensor_parallel_size=4,          # GPU 4장에 모델을 나눠 올림
+     #   tensor_parallel_size=4,          # GPU 4장에 모델을 나눠 올림
+        tensor_parallel_size=num_gpus,    # 노드의 모든 GPU 활용
         max_model_len=8192,
         gpu_memory_utilization=0.92,
         dtype="bfloat16",
