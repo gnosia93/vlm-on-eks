@@ -213,4 +213,11 @@ aws --version
 
 echo "model weight loading in $BUCKET"
 aws s3 sync /mnt/data/internvl3-78b/ s3://${BUCKET}/models/internvl3-78b/
+
+aws s3 ls s3://vlm-data-499514681453-ap-northeast-2/models/internvl3-78b/
+```
+[결과]
+```
+
+
 ```
