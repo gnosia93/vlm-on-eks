@@ -9,6 +9,17 @@ export SUBNET_ID=$SUBNET_ID
 export INSTANCE_TYPE=g6e.48xlarge
 ```
 
+#### 2) S3 버킷 생성 ####
+```
+BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
+echo "BUCKET=$BUCKET"
+
+aws s3api create-bucket \
+  --bucket $BUCKET \
+  --region $REGION \
+  --create-bucket-configuration LocationConstraint=$REGION
+```
+
 #### 2) GPU 드라이버 포함 AMI 조회 (SSM) ####
 NVIDIA 드라이버 + Docker가 들어간 Deep Learning Base GPU AMI(Ubuntu 22.04)를 조회한다.
 ```
