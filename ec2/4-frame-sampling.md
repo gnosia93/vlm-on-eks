@@ -19,4 +19,55 @@
 * 균일 샘플링 = 영상을 N구간으로 나눠 각 구간에서 1프레임씩. 장면 전환을 고루 커버합니다.
 
 
-3. ffmpeg 설치 (Graviton / aarch64)
+### ffmpeg 설치 (Graviton / aarch64) ###
+```
+sudo apt update && sudo apt install -y ffmpeg
+ffmpeg -version
+```
+
+* 고정 개수 균일 샘플링 (권장) — 영상 길이 무관하게 16프레임
+```
+DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 input.mp4)
+N=16
+FPS=$(echo "scale=6; $N / $DURATION" | bc)
+
+ffmpeg -i input.mp4 \
+  -vf "fps=${FPS},scale=448:448:force_original_aspect_ratio=decrease,pad=448:448:(ow-iw)/2:(oh-ih)/2" \
+  -frames:v $N \
+  -q:v 2 \
+  frame_%03d.jpg
+```
+* scale=448:448 → InternVL3의 기본 입력 타일 크기에 맞춤 (프레임당 토큰 수를 예측 가능하게)
+* pad → 종횡비 유지하며 정사각형으로 (왜곡 방지)
+* -q:v 2 → JPEG 고품질
+
+### 출력 레이아웃 ###
+뒤 단계(인퍼런스)가 쉽게 찾을 수 있도록 video_id 기준으로 구조화 한다.
+```
+s3://$BUCKET/finevideo/sports/G_VTkkb34gw/
+├── video.mp4              # 원본 (기존)
+├── metadata.json          # 메타/전사 (기존)
+└── frames/                # ← 새로 생성
+    ├── frame_001.jpg
+    ├── frame_002.jpg
+    ├── ...
+    └── frames.json        # 이 영상의 프레임 목록 + 샘플링 설정
+```
+#### frames.json (인퍼런스 단계의 입력 명세): ####
+```
+{
+  "video_id": "G_VTkkb34gw",
+  "num_frames": 16,
+  "sampling": "uniform",
+  "frame_size": "448x448",
+  "source_duration": 268,
+  "frames": [
+    "finevideo/sports/G_VTkkb34gw/frames/frame_001.jpg",
+    "finevideo/sports/G_VTkkb34gw/frames/frame_002.jpg"
+  ],
+  "sampling_config_hash": "a1b2c3"
+}
+```
+
+
+
