@@ -103,7 +103,7 @@ rm -rf "${WORK}"
 > [!NOTE]
 > EKS에서는 이 스크립트를 컨테이너로 감싸 Graviton 노드풀의 K8s Job으로 돌리고, manifest.jsonl의 각 줄(video_id)을 여러 Job에 나눠 병렬 처리하면 됩니다.
 
-### 5. 다음 단계(InternVL3-78B)와의 연결 ####
+### 4. 다음 단계(InternVL3-78B)와의 연결 ####
 인퍼런스 단계는 이제 영상 원본이 아니라 frames/ 아래 JPG들 + frames.json만 읽으면 됩니다.
 
 * GPU 노드는 무거운 영상 디코딩을 할 필요가 없음 (Graviton이 이미 처리)
