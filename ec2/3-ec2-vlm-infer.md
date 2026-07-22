@@ -293,5 +293,62 @@ drwxr-xr-x 2 root   root   4096 Jul 22 10:06 modules
 │       │       └── ...
 │       └── refs/
 └── modules/               ← trust_remote_code로 받은 커스텀 모델 코드
+```
 
+* 실제 가중치 파일 위치
+```
+ls -la /opt/dlami/nvme/hf-cache/hub/models--OpenGVLab--InternVL3-78B/snapshots/*/
+```
+[결과]
+```
+total 140
+drwxr-xr-x 2 root root 4096 Jul 22 11:13 .
+drwxr-xr-x 3 root root 4096 Jul 22 10:06 ..
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 added_tokens.json -> ../../blobs/dd972e4080e791eab591742c1168ee7fd6279146
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 config.json -> ../../blobs/1778c9e50e3454fa25855dea7b4edef2d007a32a
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 generation_config.json -> ../../blobs/467e2ba8edc477ad1fb650f892ab5be9210522ab
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 merges.txt -> ../../blobs/31349551d90c7606f325fe0f11bbb8bd5fa0d7c7
+lrwxrwxrwx 1 root root   76 Jul 22 10:08 model-00001-of-00033.safetensors -> ../../blobs/c527e7dfe9c1d8c0b3da1a10a6940f7dcf3caa6872078c38c3bc90413f30f99a
+lrwxrwxrwx 1 root root   76 Jul 22 10:13 model-00002-of-00033.safetensors -> ../../blobs/72b68545e081c6abfa1cd5ecd53bee5a0664353873f8423e345bcfeb9da3050e
+lrwxrwxrwx 1 root root   76 Jul 22 10:14 model-00003-of-00033.safetensors -> ../../blobs/bba45d9bc1710fefb525b588e1496eaf102249e36e8b007ca3db8be5fee8617c
+lrwxrwxrwx 1 root root   76 Jul 22 10:17 model-00004-of-00033.safetensors -> ../../blobs/7ce11fc1502f602fc7bae2489159b292e4ea9afccd0f3b59042a42de89c5ca79
+lrwxrwxrwx 1 root root   76 Jul 22 10:19 model-00005-of-00033.safetensors -> ../../blobs/aaa0c8aa08eac0bcd177c0889d03c384692c84e8aca3f9ae82604db837440c47
+lrwxrwxrwx 1 root root   76 Jul 22 10:22 model-00006-of-00033.safetensors -> ../../blobs/e1523bc2d85879c3b14e94aad601d12f5399d5d37269602b057ff0eab22904b2
+lrwxrwxrwx 1 root root   76 Jul 22 10:28 model-00007-of-00033.safetensors -> ../../blobs/1482a9e5aef97f1e39d0897b37bf24b5aa96f8fb13fedb54928b6e0da5eb85c0
+lrwxrwxrwx 1 root root   76 Jul 22 10:31 model-00008-of-00033.safetensors -> ../../blobs/110bc8463ce8fa4c51b9492a83761aadf9c7d5ff227d4c7b461a61eedf3c3682
+lrwxrwxrwx 1 root root   76 Jul 22 10:33 model-00009-of-00033.safetensors -> ../../blobs/5ba2bca20fef2912f4678b3763f2d340187a4336345c2ab2489b5749b66acbd9
+lrwxrwxrwx 1 root root   76 Jul 22 10:36 model-00010-of-00033.safetensors -> ../../blobs/cbb780cc93a6ca302b698c877b0b93d0e613b8b574e629dc3d194ce8884d1c8e
+lrwxrwxrwx 1 root root   76 Jul 22 10:37 model-00011-of-00033.safetensors -> ../../blobs/854ab3f066ed326cedc508e4e43179c0a0ea83ad7c6fed7cddb56fb4f2107687
+lrwxrwxrwx 1 root root   76 Jul 22 10:39 model-00012-of-00033.safetensors -> ../../blobs/5727c85fe014dc2275f4ebd132ac1ecb6748aca8d5a27978c423876a384c8d60
+lrwxrwxrwx 1 root root   76 Jul 22 10:41 model-00013-of-00033.safetensors -> ../../blobs/6d668f58843bca4e08e03c1ace0bcce04e8d93ed1b05d3dee694b0bc7a839d60
+lrwxrwxrwx 1 root root   76 Jul 22 10:44 model-00014-of-00033.safetensors -> ../../blobs/a53585f31eafa44f6df094069462513ed6c454a2365ad93dd0535befb754a6d9
+lrwxrwxrwx 1 root root   76 Jul 22 10:46 model-00015-of-00033.safetensors -> ../../blobs/b0bb4d89a5883b122f33ccf781aa9f8902642c5499f785b7d32614967e6fab13
+lrwxrwxrwx 1 root root   76 Jul 22 10:48 model-00016-of-00033.safetensors -> ../../blobs/d1dda56c3cdf0a93e2ca259a8c1829cb75537a802f2c6d7caab78ce70ee8d196
+lrwxrwxrwx 1 root root   76 Jul 22 10:50 model-00017-of-00033.safetensors -> ../../blobs/0339d1329613e1e472ea2efb23d4ee52b19d01979ef1c12684d2306ee5fb15c1
+lrwxrwxrwx 1 root root   76 Jul 22 10:52 model-00018-of-00033.safetensors -> ../../blobs/094988fede9f435ce6ce9f008a1be284237b6e4ac1873c765699ed99246b3613
+lrwxrwxrwx 1 root root   76 Jul 22 10:53 model-00019-of-00033.safetensors -> ../../blobs/da03cc20b848da5c96b6876933cf6580efd798c54041acb4295b7d48472916b8
+lrwxrwxrwx 1 root root   76 Jul 22 10:54 model-00020-of-00033.safetensors -> ../../blobs/f2816c70c72bb9e3537f7c0d58b98dacec4667713484283feb70ae0ac330d0a5
+lrwxrwxrwx 1 root root   76 Jul 22 10:55 model-00021-of-00033.safetensors -> ../../blobs/962d9a18b121f1c8fddd539c3867e0eb06d78a7bdf7716836f0e92d6c4399178
+lrwxrwxrwx 1 root root   76 Jul 22 10:57 model-00022-of-00033.safetensors -> ../../blobs/a55ed9a9129177704eca72cf072aa8c840c36d400f1d21ab5d2f813ada9a5092
+lrwxrwxrwx 1 root root   76 Jul 22 10:58 model-00023-of-00033.safetensors -> ../../blobs/d85a9570c89353db1a4cce612ff2d49a095ee5939711104959431dcb4fb6d6dc
+lrwxrwxrwx 1 root root   76 Jul 22 11:00 model-00024-of-00033.safetensors -> ../../blobs/9acd1ccb69b3359297dd344b1cecd8092f6d4951e0ff81a6b69b579d3a258c78
+lrwxrwxrwx 1 root root   76 Jul 22 11:02 model-00025-of-00033.safetensors -> ../../blobs/34a2f5f76356bc9ccbcad7b9dd5383fe1e77607e72992cf6c7fdc400d1ed6487
+lrwxrwxrwx 1 root root   76 Jul 22 11:04 model-00026-of-00033.safetensors -> ../../blobs/cb7bac10ce2c1dbcb79e989605cf2600f0e9414c7c6b327fa8207647c28c7377
+lrwxrwxrwx 1 root root   76 Jul 22 11:05 model-00027-of-00033.safetensors -> ../../blobs/d0260aea0d19a30142d61185abd96caea14bd0bd3bebf8995657300f0fcd9d6b
+lrwxrwxrwx 1 root root   76 Jul 22 11:06 model-00028-of-00033.safetensors -> ../../blobs/9ed43307471db6a6414c3e6cd744f78e2b1bce797d42eccd9455bf0e067972a8
+lrwxrwxrwx 1 root root   76 Jul 22 11:07 model-00029-of-00033.safetensors -> ../../blobs/2e16f56179b645f582b153ea20426ce8903dd6b6fb6d67dd14a0b6059e87be3e
+lrwxrwxrwx 1 root root   76 Jul 22 11:09 model-00030-of-00033.safetensors -> ../../blobs/93197fbc271271458a29c435fd54f2073b2aa5c4ab2c0015e61d6e50911c5f54
+lrwxrwxrwx 1 root root   76 Jul 22 11:10 model-00031-of-00033.safetensors -> ../../blobs/e69dc62861fb64d4426f31eabbd5d441cf1c7c5e93227844090fdabc757c8316
+lrwxrwxrwx 1 root root   76 Jul 22 11:12 model-00032-of-00033.safetensors -> ../../blobs/665c87a6610f3015e9e0cec49b1d18a63b266528c8bd6387fd8670c18a2dc92a
+lrwxrwxrwx 1 root root   76 Jul 22 11:13 model-00033-of-00033.safetensors -> ../../blobs/d58c375c9e062ef1c203fdd44291b7905276f1ebfbcdc70975c9ca5bb3a789b1
+lrwxrwxrwx 1 root root   52 Jul 22 11:13 model.safetensors.index.json -> ../../blobs/677398ef91d675e2052367db8b82666f35d46a36
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 preprocessor_config.json -> ../../blobs/dfd7e50d9d4e67cd679b16b337b419a0c6cfa849
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 special_tokens_map.json -> ../../blobs/ac23c0aaa2434523c494330aeb79c58395378103
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 tokenizer.json -> ../../blobs/1b4f039248a420730cd195d6d6a1a9cc713a7f14
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 tokenizer_config.json -> ../../blobs/77b7446cccf72042b1c41dbacb8eb603afe68eca
+lrwxrwxrwx 1 root root   52 Jul 22 10:06 vocab.json -> ../../blobs/6bce3a0a3866c4791a74d83d78f6824c3af64ec3
+```
+* 가중치 파일 갯수
+```
+find /opt/dlami/nvme/hf-cache/hub -name "*.safetensors" | wc -l
 ```
