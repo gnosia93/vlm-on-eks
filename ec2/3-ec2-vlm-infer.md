@@ -280,3 +280,18 @@ drwxrwxrwt 4 root   root   4096 Jul 22 09:59 ..
 drwxr-xr-x 4 root   root   4096 Jul 22 10:06 hub
 drwxr-xr-x 2 root   root   4096 Jul 22 10:06 modules
 ```
+* 경로 구조
+```
+/opt/dlami/nvme/hf-cache/
+├── hub/
+│   └── models--OpenGVLab--InternVL3-78B/
+│       ├── blobs/          ← 실제 파일 내용 (해시 이름의 대용량 파일들)
+│       ├── snapshots/
+│       │   └── <commit-hash>/
+│       │       ├── *.safetensors   ← 가중치 (blobs로의 심볼릭 링크)
+│       │       ├── config.json
+│       │       └── ...
+│       └── refs/
+└── modules/               ← trust_remote_code로 받은 커스텀 모델 코드
+
+```
