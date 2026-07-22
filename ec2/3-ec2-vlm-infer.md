@@ -1,9 +1,28 @@
 ### 1. g7e.24xlarge 인스턴스 생성 ###
 
-실행 방법
-g7e.24xlarge 인스턴스에서, vLLM 이미지를 쓰는 게 제일 간단해요. (드라이버는 GPU AMI에 이미 있다고 가정)
+* 1) 환경설정
+```
+REGION=ap-northeast-2
+KEY_NAME=my-key                 # 기존 EC2 키페어 이름
+SG_ID=sg-xxxxxxxx               # SSH(22) 열린 보안그룹
+SUBNET_ID=subnet-xxxxxxxx       # GPU 용량 있는 AZ의 서브넷
+```
 
-도커로 실행:
+* 2) GPU 드라이버 포함 AMI 조회 (SSM)
+NVIDIA 드라이버 + Docker가 들어간 Deep Learning Base GPU AMI(Ubuntu 22.04)를 조회한다.
+```
+AMI_ID=$(aws ssm get-parameter \
+  --region $REGION \
+  --name /aws/service/deeplearning/ami/x86_64/base-oss-nvidia-driver-gpu-ubuntu-22.04/latest/ami-id \
+  --query 'Parameter.Value' --output text)
+
+echo $AMI_ID
+```
+
+* 3) 인스턴스 생성
+
+
+
 
 ### 2.소스 다운로드 ###
 
