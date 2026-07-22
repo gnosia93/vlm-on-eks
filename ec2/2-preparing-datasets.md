@@ -11,6 +11,8 @@
 
 ### 1. hf 토큰 발급 ###
 
+* huggingface.co/settings/tokens로 이동하여 우측 상단 프로필 → Settings → Access Tokens 경로로 간다.
+* New token (또는 Create new token) 클릭하여 Read 타입의 토큰을 발급 받는다. 
 
 
 
