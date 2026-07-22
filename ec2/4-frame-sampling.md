@@ -80,7 +80,7 @@ cat > sample_frames.sh <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
-BUCKET="$BUCKET"
+BUCKET="${BUCKET:?BUCKET env var must be set}"
 VIDEO_ID="$1"
 PREFIX="finevideo/sports/${VIDEO_ID}"
 N_FRAMES=16
