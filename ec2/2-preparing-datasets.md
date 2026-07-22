@@ -14,8 +14,11 @@
 ```
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export REGION=ap-northeast-2
-export SG_ID=$SG_ID
-export SUBNET_ID=$SUBNET_ID
+export SG_ID=None
+export SUBNET_ID=$(aws ec2 describe-subnets --region $REGION \
+  --filters "Name=tag:Name,Values=vlm-public-subnet" \
+  --query "Subnets[0].SubnetId" \
+  --output text)
 
 echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "REGION: $REGION"
