@@ -212,6 +212,15 @@ aws s3 ls s3://my-vlm-data-bucket/output/run-2026-07-22/shards/
 aws s3 cp s3://my-vlm-data-bucket/output/run-2026-07-22/shards/shard-00000.jsonl - | head -n 3
 ```
 
+* 건수 확인
+```
+# 입력 건수
+aws s3 cp s3://my-vlm-data-bucket/input/manifest.jsonl - | wc -l
+# 출력 건수
+aws s3 cp s3://my-vlm-data-bucket/output/run-2026-07-22/train.jsonl - | wc -l
+```
+
+
 * Job 수동 재실행
 ```
 kubectl -n vlm-batch delete job vlm-batch-infer
