@@ -153,10 +153,19 @@ cd vlm-on-eks/src
 
 
 ### 3. 실행하기 ###
+nvlme 인스턴스 스토어 정보를 확인한다.
+```
+ls -ld /opt/dlami/nvme
+
+sudo mkdir -p /opt/dlami/nvme/hf-cache
+sudo chown ubuntu:ubuntu /opt/dlami/nvme/hf-cache
+```
+
+docker 이미지로 인퍼런스를 실행한다. 이때 huggingface 의 모델은 호스트 경로 /opt/dlami/nvme/hf-cache(NVME 인스턴스 스토어) 에 저장된다.
 ```
 docker run --rm --gpus all --shm-size=16g \
   -v $(pwd):/work -w /work \
-  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  -v /opt/dlami/nvme/hf-cache:/root/.cache/huggingface \
   vllm/vllm-openai:v0.6.6.post1 \
   python simple_infer.py
 ```
