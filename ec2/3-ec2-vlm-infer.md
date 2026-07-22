@@ -237,6 +237,31 @@ INFO 07-22 03:10:41 model_runner.py:1094] Starting to load model OpenGVLab/Inter
 INFO 07-22 03:10:42 weight_utils.py:251] Using model weights format ['*.safetensors']
 (VllmWorkerProcess pid=485) INFO 07-22 03:10:42 weight_utils.py:251] Using model weights format ['*.safetensors']
 model-00002-of-00033.safetensors:  99%|████████████████████████████████████████████████████████████████████████████████████████████████▊ | 4.87G/4.94G [00:31<00:04, 15.7MB/s
+...
+
+
+
+Processed prompts: 100%|█████████████████████████████████████████████████████████████████| 3/3 [00:03<00:00,  1.31s/it, est. speed input: 247.73 toks/s, output: 19.10 toks/s]
+
+============================================================
+[이미지 1] 프롬프트: 이 이미지에 무엇이 보이는지 한국어로 설명해줘.
+응답: 이 이미지는 파란색 배경에 가운데에 빨간색 원이 있는 깃발입니다. 이는 일본의 국기인 "히와리"입니다.
+------------------------------------------------------------
+[이미지 2] 프롬프트: 도형의 개수와 색을 한국어로 알려줘.
+응답: 이미지에는 초록색 사각형이 세 개 있습니다.
+------------------------------------------------------------
+[이미지 3] 프롬프트: 이미지를 한 문장으로 한국어로 요약해줘.
+응답: 이미지는 노란색 배경에 검은색 삼각형이 있습니다.
+------------------------------------------------------------
+INFO 07-22 04:20:44 multiproc_worker_utils.py:140] Terminating local vLLM worker processes
+(VllmWorkerProcess pid=484) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+(VllmWorkerProcess pid=485) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+(VllmWorkerProcess pid=489) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+(VllmWorkerProcess pid=487) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+(VllmWorkerProcess pid=490) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+(VllmWorkerProcess pid=488) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+(VllmWorkerProcess pid=486) INFO 07-22 04:20:44 multiproc_worker_utils.py:247] Worker exiting
+[rank0]:[W722 04:20:51.746222605 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
 ```
 > [!TIP]
 > hf 의 경우 익명 연결시 쓰로틀링이 걸리게 되는데 이를 회피하기 아래와 같이 두가지 파라미터를 적용한다. 좀더 빠르게 실행하기 위해서는 가중치를 다운로드 받은 후 S3 에 저장해 놓는 것이 유리하다. 
