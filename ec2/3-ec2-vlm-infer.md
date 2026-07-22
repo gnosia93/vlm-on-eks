@@ -88,7 +88,6 @@ aws ec2 run-instances \
   --region $REGION \
   --image-id $AMI_ID \
   --instance-type $INSTANCE_TYPE \
-  --key-name $KEY_NAME \
   --security-group-ids $SG_ID \
   --subnet-id $SUBNET_ID \
   --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":600,"VolumeType":"gp3","Throughput":500,"Iops":6000,"DeleteOnTermination":true}}]' \
