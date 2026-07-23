@@ -7,6 +7,8 @@
 
 ### 입력 데이터 포맷 (data/train.jsonl) ###
 
+jsonl 형식으로 한 줄은 하나의 영상 데이터를 의미하며 총 16개의 프레임과 질문(question), 답변(answer) 로 구성되어 있다. 
+이 데이터는 티처 모델로 부터 만들어낸 지식 증류 데이터이다. 
 ```
 {"frames": ["data/frames/vid001/f00.jpg", "data/frames/vid001/f01.jpg", "data/frames/vid001/f02.jpg", "...(총 16개)...",
 "data/frames/vid001/f15.jpg"], "question": "이 영상에서 무슨 일이 일어나는지 설명해줘.", "answer": "한 남성이 주방에서 재료를
