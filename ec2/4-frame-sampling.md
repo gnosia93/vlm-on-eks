@@ -64,7 +64,7 @@ frames.json (인퍼런스 단계의 입력 명세) 는 다음과 같습니다.
   "sampling_config_hash": "a1b2c3"
 }
 ```
-* sampling_config_hash를 넣어두면, 앞서 얘기한 캐싱/멱등성에 활용됩니다. 샘플링 설정이 바뀌면 해시가 달라져 재샘플링, 그대로면 스킵.
+* sampling_config_hash - 캐싱/멱등성에 활용, 샘플링 설정이 바뀌면 해시가 달라져 재샘플링
 
 
 ### 2. 영상 샘플링 하기 ###
