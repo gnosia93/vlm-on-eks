@@ -60,6 +60,9 @@
 - 영상 안에 특별한 사건이 없다면 actions와 qa를 빈 배열([])로 두고 confidence를 "low"로 설정하세요.
 ```
 
+> [!INFO]
+
+
 #### 3. Few-Shot 예시 (스타일 고정용, Optional) ####
 ```
 {
