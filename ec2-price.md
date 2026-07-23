@@ -1,5 +1,5 @@
-<img width="10" height="10" alt="download" src="https://github.com/user-attachments/assets/6e5eca91-aaae-4c52-a43d-6f5b24b1dff8" />
-* p5.48xlarge - USD 75.9552 - NVIDIA H100 x 8개 (GPU당 80GB HBM3)
+* p5.48xlarge - USD 75.9552 - NVIDIA H100 x 8개 (GPU당 80GB HBM3) <img width="10" height="10" alt="download" src="https://github.com/user-attachments/assets/6e5eca91-aaae-4c52-a43d-6f5b24b1dff8" />
+
 * p5en.48xlarge - USD 87.34848 - NVIDIA H200 Tensor Core GPU x 8개 (GPU당 141GB HBM3e)
 * p4d.24xlarge - USD 30.41028 - NVIDIA A100 Tensor Core GPU x 8개 (GPU당 40GB HBM2)
 * g7e.48xlarge - USD 40.74921 - NVIDIA RTX PRO 6000 Blackwell x 8개 (GPU당 96GB)
