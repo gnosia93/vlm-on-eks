@@ -79,7 +79,7 @@ _아래는 위 순서를 밟아 작성한 1차 초안 샘플이다. 워크샵에
 > # shape: (num_tiles, 3, 448, 448) — bfloat16, GPU
 > 
 > # 프롬프트 안에서는 `<image>` 토큰이 이미지 자리를 표시
-> question = "`<image>\n<image>\n...<image>\n`" + user_prompt_text
+> question = "<image>\n<image>\n...<image>\n" + user_prompt_text
 > 
 > response = model.chat(tokenizer, pixel_values, question, ...)
 > ```
