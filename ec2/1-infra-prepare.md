@@ -58,61 +58,43 @@ echo ${OUTPUT}
 vs-code 서버에 웹으로 접속한 후, 터미널을 열어 kubectl, eksctl, helm 을 설치한다. (vs-code 패스워드는 code!@#c 이다)
 ![](https://github.com/gnosia93/training-on-eks/blob/main/chapter/images/code-server.png)
  
-#### 1. kubectl 설치 #### 
+### 1. 소프트웨어 설치 ### 
 ```
 ARCH=amd64     
+PLATFORM=$(uname -s)_$ARCH
+
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.3/2025-08-03/bin/linux/$ARCH/kubectl
 chmod +x ./kubectl
 mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
 echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
 
-kubectl version --client
-```
-
-#### 2. eksctl 설치 ####
-```
-ARCH=amd64    
-PLATFORM=$(uname -s)_$ARCH
 curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
-
 tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
 sudo install -m 0755 /tmp/eksctl /usr/local/bin && rm /tmp/eksctl
 
-eksctl version
-```
-
-#### 3. helm 설치 ####
-```
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
 sh get_helm.sh
 
-helm version
-``` 
-
-#### 4. k9s 설치 ####
-```
 curl -sL https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz -o k9s.tar.gz
 tar -xzf k9s.tar.gz k9s
 sudo install k9s /usr/local/bin/
 rm k9s.tar.gz k9s
-```
 
-#### 5. eks-node-viewer 설치 ####
-```
 sudo dnf update -y
 sudo dnf install golang -y
-
-# 설치 확인 (v1.11 이상 필요)
-go version
 go install github.com/awslabs/eks-node-viewer/cmd/eks-node-viewer@latest
-
 echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> ~/.bashrc
 source ~/.bashrc
-```
-go 컴파일 과정에서 다소 시간이 소요된다.
 
-### 클러스터 설치하기 ###
 
+kubectl version --client
+eksctl version
+helm version
+``` 
+
+### 2. eksctl로 클러스터 생성 ###
+
+워커노드 들은 식별된 프라이빗 서브넷에 위치하게 된다. 
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -128,11 +110,8 @@ echo "CLUSTER_NAME: $CLUSTER_NAME"
 echo "K8S_VERSION: $K8S_VERSION"
 echo "KARPENTER_VERSION: $KARPENTER_VERSION"
 echo "VPC_ID: $VPC_ID"
-```
 
-#### 1. 서브넷 식별 ####
-클러스터의 데이터 플레인(워커노드 들)은 아래의 프라이빗 서브넷에 위치하게 된다. 
-```
+
 aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=vlm-priv-subnet-*" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId, AZ:AvailabilityZone, Name:Tags[?Key=='Name']|[0].Value}" \
@@ -147,7 +126,6 @@ if [ -z "$SUBNET_IDS" ]; then
     echo "에러: VPC ${VPC_ID} 에 서브넷이 존재하지 않습니다.."
 fi
 
-# YAML 형식에 맞게 동적 문자열 생성 (각 ID 뒤에 ": {}" 추가 및 앞쪽 Identation과 줄바꿈)
 SUBNET_YAML=""
 if [ -f SUBNET_IDS ]; then
     rm SUBNET_IDS
@@ -158,7 +136,6 @@ do
 done
 ```
 
-#### 2. 클러스터 생성 #### 
 클러스터 생성 완료까지 약 20 분 정도의 시간이 소요된다.
 ```
 cat > cluster.yaml <<EOF 
@@ -207,8 +184,7 @@ iam:
 karpenter:
   version: "${KARPENTER_VERSION}"
 EOF
-```
-```
+
 eksctl create cluster -f cluster.yaml
 ```
 
