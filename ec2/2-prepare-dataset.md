@@ -43,6 +43,7 @@ tar xf ffmpeg.tar.xz
 sudo cp ffmpeg-*-static/ffmpeg ffmpeg-*-static/ffprobe /usr/local/bin/
 ffmpeg -version
 
+pip install "python-dateutil==2.9.0"
 pip install "datasets>=3.0" huggingface_hub hf_transfer boto3
 ```
 
