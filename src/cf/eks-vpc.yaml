@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Terraform to CloudFormation: Development Environment with EKS Roles'
+Description: 'vlm-distillation infra'
 
 Parameters:
   ClusterName:
