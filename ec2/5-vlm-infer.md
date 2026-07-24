@@ -328,13 +328,15 @@ aws s3 cp "s3://vlm-data-499514681453-ap-northeast-2/finevideo/sports/09buIj5Z5l
 }
 ```
 
-[! INFORMATION]
+[!NOTE]
 > 파일명 042dd539417d 생성 규칙
 > ```
 > run_id = hashlib.sha256(
-      f"{prompt}|{MODEL}|{sampling_config_hash}".encode()
-  ).hexdigest()[:12]
+>      f"{prompt}|{MODEL}|{sampling_config_hash}".encode()
+> ).hexdigest()[:12]
+>
 > 프롬프트 | 모델 | 프레임해시 를 이어붙여 SHA-256 → 앞 12자리. 
+> 프롬프트 바꾸면 → 새 파일로 쌓임, 같은 프롬프트 재실행 → 덮어씀 (최신 1개 유지)
 > ```
 
 
