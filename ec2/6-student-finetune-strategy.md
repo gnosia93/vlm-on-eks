@@ -43,7 +43,7 @@ aws s3 sync s3://${BUCKET}/models/internvl3-1b/ /opt/dlami/nvme/hf-cache/models/
 
 cd ~/vlm-distillation/src
 
-docker run --rm -it --gpus all --shm-size=16g \
+docker run --rm -it --gpus 1 --shm-size=16g \
   -v $(pwd):/work -w /work \
   -v /opt/dlami/nvme/hf-cache/models:/models \
   -e PYTHONUNBUFFERED=1 \
