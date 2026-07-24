@@ -4,7 +4,7 @@
 ```
 export AWS_REGION="ap-northeast-2"
 export CF_STACK="vlm-distillation-`date +"%H-%M-%S"`"
-echo "CF_STACK: $CF_STACK"
+echo "CF_STACK: $CF_STACK" | tee CF_STACK	
 
 cd ~
 git clone https://github.com/gnosia93/vlm-distillation.git
