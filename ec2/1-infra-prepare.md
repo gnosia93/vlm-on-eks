@@ -613,7 +613,7 @@ drwxr-xr-x. 40 root root 0 Jul 24 17:43 ..
 lrwxrwxrwx.  1 root root 0 Jul 24 17:43 rdmap47s0 -> ../../devices/pci0000:24/0000:24:00.0/0000:25:00.0/0000:26:01.0/0000:2f:00.0/infiniband/rdmap47s0
 ```
 
-## 큐브플로우 Trainer 설치 ##
+## **_(Optional)_** 큐브플로우 Trainer 설치 ##
 
 Kubeflow Trainer의 주된 존재 이유는 여러 노드에 걸친 파드들을 조율하는 데 있습니다. 싱글 노드 멀티 GPU 환경에서는 torchrun --nproc_per_node=8 train.py 한 번이면 충분한데, torchrun이 한 노드 안에서 프로세스 여러 개를 띄우고 NCCL이 NVLink나 PCIe를 통해 GPU 간 통신을 처리하기 때문입니다. 이 경우 모든 작업이 파드 하나 안에서 완결되므로 별도의 조율이 필요하지 않습니다.
 
