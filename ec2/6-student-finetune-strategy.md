@@ -124,6 +124,10 @@ LoRA를 권하는 이유:
 
 ubuntu GPU 인스턴스에서 exit 명령어를 두번 수행하셔 vs-code ec2 인스턴스로 돌아온 다음 (프롬프트는 x86_64 이다), GPU 인스턴스를 삭제한다. 
 ```
+echo -e "\n-------------------------------------"
+echo "INSTANCE: [ $INSTANCE ]"
+echo "REGION: [ $REGION ]"
+
 aws ec2 terminate-instances --instance-ids $INSTANCE --region $REGION
 ```
 
