@@ -232,7 +232,7 @@ hf download OpenGVLab/InternVL3-78B --local-dir /mnt/data/internvl3-78b
 hf download OpenGVLab/InternVL3-1B --local-dir /mnt/data/internvl3-1b
 
 # S3에 업로드 (flat 그대로)
-echo "model weight loading in $BUCKET"
+echo "model weight loading in [ $BUCKET ]"
 aws s3 sync /mnt/data/internvl3-78b/ s3://${BUCKET}/models/internvl3-78b/
 aws s3 sync /mnt/data/internvl3-1b/ s3://${BUCKET}/models/internvl3-1b/
 
