@@ -256,6 +256,14 @@ Resources:
               - "autoscaling:TerminateInstanceInAutoScalingGroup"
               - "autoscaling:CreateOrUpdateTags"
               - "autoscaling:DescribeTags"
+              - "ssm:GetParameter"
+              - "ssm:DescribeInstanceInformation"
+              - "ssm:StartSession"
+              - "ssm:TerminateSession"
+              - "ssm:ResumeSession"
+              - "ssm:SendCommand"
+              - "ssm:GetCommandInvocation"
+              - "ssm:ListCommandInvocations"
             Resource: "*"
           - Sid: KarpenterInfrastructure
             Effect: Allow
