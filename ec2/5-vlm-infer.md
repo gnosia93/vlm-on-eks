@@ -29,7 +29,7 @@ export SUBNET_ID=$(aws ec2 describe-subnets --region $REGION \
 export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
 export INSTANCE_TYPE=g6e.48xlarge
 
-echo "\n-------------------------------------"
+echo -e "\n-------------------------------------"
 echo "REGION: $REGION"
 echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "SG_ID: $SG_ID"
