@@ -670,7 +670,6 @@ spec:
           emptyDir:
             medium: Memory               # 호스트 IPC 대신 메모리 볼륨
             sizeLimit: 16Gi              # 모델/배치에 맞게 조정
-
 ```
 * privileged: true 는 호스트 시스템의 모든 리소스(디바이스)와 커널 기능에 대한 완전한 접근 권한을 부여하는 설정이다.
 * 덮어쓰는 두 가지 경로 (중요)
