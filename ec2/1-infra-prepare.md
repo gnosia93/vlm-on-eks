@@ -17,7 +17,7 @@ echo ${MY_IP}
 aws cloudformation create-stack \
   --region ${AWS_REGION} \
   --stack-name vlm-distillation \
-  --template-body file://$(pwd)/cf/eks-vpc.yaml \
+  --template-body file://$(pwd)/src/cf/eks-vpc.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
   --tags Key=Project,Value=vlm-distillation
 ```
