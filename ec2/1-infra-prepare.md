@@ -567,19 +567,22 @@ spec:
           add: ["IPC_LOCK"]
 EOF
 ```
+아래 명령어로 efa-test-pod 가 EFA 지원노드에 스케줄링 된 것을 확인 한 후 (Running), 
+```
+kubectl get pods
+```
+[결과]
+```
+NAME           READY   STATUS      RESTARTS   AGE
+efa-test-pod   1/1     Running     0          3m20s
+gpu-pod        0/1     Completed   0          17m
+```
+
 efa-test-pod 파드에 로그인하여 efa 디바이스 정보를 조회한다. 
 ```
 kubectl exec -it efa-test-pod -- /bin/bash
 fi_info -p efa
 ls -la /sys/class/infiniband/
-```
-
-### 3. EFA 지원 GPU 인스턴스 조회 ###
-```
-aws ec2 describe-instance-types \
-    --filters Name=network-info.efa-supported,Values=true \
-    --query "InstanceTypes[?GpuInfo.Gpus!=null].InstanceType" \
-    --output text | sort
 ```
 
 
