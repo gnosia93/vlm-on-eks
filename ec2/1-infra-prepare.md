@@ -452,10 +452,11 @@ spec:
         volumeSize: 600Gi
         volumeType: gp3
 EOF
-```
-ec2nodeclass 와 nodepol 을 생성하고 Ready 상태값이 True 임을 확인한다. 
-```
+
 kubectl apply -f nodepool-gpu.yaml
+```
+Ready 상태값이 True 임을 확인한다. 
+```
 
 kubectl get ec2nodeclass,nodepool
 ```
