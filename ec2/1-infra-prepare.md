@@ -244,7 +244,87 @@ eksctl create cluster -f cluster.yaml
 2026-07-24 16:13:45 [ℹ]  building cluster stack "eksctl-vlm-distillation-cluster"
 2026-07-24 16:13:45 [ℹ]  deploying stack "eksctl-vlm-distillation-cluster"
 2026-07-24 16:14:15 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
-...
+2026-07-24 16:14:45 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:15:45 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:16:45 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:17:46 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:18:46 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:19:46 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:20:46 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:21:46 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:21:47 [ℹ]  creating addon: eks-pod-identity-agent
+2026-07-24 16:21:48 [ℹ]  successfully created addon: eks-pod-identity-agent
+2026-07-24 16:21:48 [ℹ]  pod identity associations are set for "vpc-cni" addon; will use these to configure required IAM permissions
+2026-07-24 16:21:48 [ℹ]  deploying stack "eksctl-vlm-distillation-addon-vpc-cni-podidentityrole-aws-node"
+2026-07-24 16:21:48 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-addon-vpc-cni-podidentityrole-aws-node"
+2026-07-24 16:22:18 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-addon-vpc-cni-podidentityrole-aws-node"
+2026-07-24 16:22:18 [ℹ]  creating addon: vpc-cni
+2026-07-24 16:22:20 [ℹ]  successfully created addon: vpc-cni
+2026-07-24 16:22:20 [ℹ]  creating addon: kube-proxy
+2026-07-24 16:22:21 [ℹ]  successfully created addon: kube-proxy
+2026-07-24 16:22:21 [ℹ]  creating addon: coredns
+2026-07-24 16:22:21 [ℹ]  successfully created addon: coredns
+2026-07-24 16:24:23 [ℹ]  addon "vpc-cni" active
+2026-07-24 16:24:24 [ℹ]  updating IAM resources stack "eksctl-vlm-distillation-addon-vpc-cni-podidentityrole-aws-node" for pod identity association "a-amlxhmzglci1cyqeb"
+2026-07-24 16:24:24 [ℹ]  waiting for CloudFormation changeset "eksctl-kube-system-aws-node-update-1784910264" for stack "eksctl-vlm-distillation-addon-vpc-cni-podidentityrole-aws-node"
+2026-07-24 16:24:24 [ℹ]  nothing to update
+2026-07-24 16:24:24 [ℹ]  IAM resources for kube-system/aws-node (pod identity association ID: a-amlxhmzglci1cyqeb) are already up-to-date
+2026-07-24 16:24:24 [ℹ]  updating addon
+2026-07-24 16:24:35 [ℹ]  addon "vpc-cni" active
+2026-07-24 16:24:35 [ℹ]  building managed nodegroup stack "eksctl-vlm-distillation-nodegroup-ng-x86"
+2026-07-24 16:24:35 [ℹ]  deploying stack "eksctl-vlm-distillation-nodegroup-ng-x86"
+2026-07-24 16:24:36 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-nodegroup-ng-x86"
+2026-07-24 16:25:06 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-nodegroup-ng-x86"
+2026-07-24 16:25:52 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-nodegroup-ng-x86"
+2026-07-24 16:27:41 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-nodegroup-ng-x86"
+2026-07-24 16:27:41 [ℹ]  waiting for the control plane to become ready
+2026-07-24 16:27:41 [✔]  saved kubeconfig as "/home/ec2-user/.kube/config"
+2026-07-24 16:27:41 [ℹ]  no tasks
+2026-07-24 16:27:41 [✔]  all EKS cluster resources for "vlm-distillation" have been created
+2026-07-24 16:27:41 [ℹ]  nodegroup "ng-x86" has 2 node(s)
+2026-07-24 16:27:41 [ℹ]  node "ip-10-0-10-207.ap-northeast-2.compute.internal" is ready
+2026-07-24 16:27:41 [ℹ]  node "ip-10-0-11-229.ap-northeast-2.compute.internal" is ready
+2026-07-24 16:27:41 [ℹ]  waiting for at least 2 node(s) to become ready in "ng-x86"
+2026-07-24 16:27:41 [ℹ]  nodegroup "ng-x86" has 2 node(s)
+2026-07-24 16:27:41 [ℹ]  node "ip-10-0-10-207.ap-northeast-2.compute.internal" is ready
+2026-07-24 16:27:41 [ℹ]  node "ip-10-0-11-229.ap-northeast-2.compute.internal" is ready
+2026-07-24 16:27:41 [✔]  created 1 managed nodegroup(s) in cluster "vlm-distillation"
+2026-07-24 16:27:42 [ℹ]  creating addon: metrics-server
+2026-07-24 16:28:17 [ℹ]  addon "metrics-server" active
+2026-07-24 16:28:18 [!]  the recommended way to provide IAM permissions for "aws-ebs-csi-driver" addon is via pod identity associations; after addon creation is completed, run `eksctl utils migrate-to-pod-identity`
+2026-07-24 16:28:18 [ℹ]  creating role using recommended policies for "aws-ebs-csi-driver" addon
+2026-07-24 16:28:18 [ℹ]  deploying stack "eksctl-vlm-distillation-addon-aws-ebs-csi-driver"
+2026-07-24 16:28:18 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-addon-aws-ebs-csi-driver"
+2026-07-24 16:28:48 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-addon-aws-ebs-csi-driver"
+2026-07-24 16:28:48 [ℹ]  creating addon: aws-ebs-csi-driver
+2026-07-24 16:29:17 [ℹ]  addon "aws-ebs-csi-driver" active
+2026-07-24 16:29:18 [ℹ]  1 task: { create karpenter for stack "vlm-distillation" }
+2026-07-24 16:29:18 [ℹ]  building nodegroup stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:29:18 [ℹ]  deploying stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:29:18 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:29:48 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:30:45 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:31:43 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:33:41 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-karpenter"
+2026-07-24 16:33:41 [ℹ]  karpenter.createServiceAccount=false: eksctl will create both the IAM role and the "karpenter" service account in namespace "karpenter"
+2026-07-24 16:33:41 [ℹ]  1 task: { 
+    2 sequential sub-tasks: { 
+        create IAM role for serviceaccount "karpenter/karpenter",
+        create serviceaccount "karpenter/karpenter",
+    } }2026-07-24 16:33:41 [ℹ]  1 task: { 
+    2 sequential sub-tasks: { 
+        create IAM role for serviceaccount "karpenter/karpenter",
+        create serviceaccount "karpenter/karpenter",
+    } }2026-07-24 16:33:41 [ℹ]  building iamserviceaccount stack "eksctl-vlm-distillation-addon-iamserviceaccount-karpenter-karpenter"
+2026-07-24 16:33:41 [ℹ]  deploying stack "eksctl-vlm-distillation-addon-iamserviceaccount-karpenter-karpenter"
+2026-07-24 16:33:41 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-addon-iamserviceaccount-karpenter-karpenter"
+2026-07-24 16:34:11 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-addon-iamserviceaccount-karpenter-karpenter"
+2026-07-24 16:34:12 [ℹ]  created namespace "karpenter"
+2026-07-24 16:34:12 [ℹ]  created serviceaccount "karpenter/karpenter"
+2026-07-24 16:34:12 [ℹ]  adding identity "arn:aws:iam::499514681453:role/eksctl-KarpenterNodeRole-vlm-distillation" to auth ConfigMap
+2026-07-24 16:34:12 [ℹ]  adding Karpenter to cluster vlm-distillation
+2026-07-24 16:34:30 [ℹ]  kubectl command should work with "/home/ec2-user/.kube/config", try 'kubectl get nodes'
+2026-07-24 16:34:30 [✔]  EKS cluster "vlm-distillation" in "ap-northeast-2" region is ready
 ```
 
 EKS 에서 클러스터 시큐리티 그룹은 컨트롤 플레인과 워커노드 사이의 통신을 가능하게 한다. 컨트롤 플레인은 10250 포트를 통해 노드의 큐블렛과 통신하고 워커노드는 443 포트를 이용하여 컨트롤 플레인의 API 서버에 접근을 시도한다. 아래 명령어는 클러스터 시큐리티 그룹에 "karpenter.sh/discovery=${CLUSTER_NAME}" 태크가 존재하는지 확인하는 스크립트이다. 카펜터가 노드를 생성할때, 이와 동일한 태크를 가진 시큐리티 그룹을 찾아 신규 노드에 할당하게 된다. 시큐리티 그룹 검색에 실패하게 되는 경우, EC2 인스턴스는 생성되지만 EKS 클러스터에 조인하지 못한다.  
