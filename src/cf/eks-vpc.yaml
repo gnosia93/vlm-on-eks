@@ -1,0 +1,403 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Terraform to CloudFormation: Development Environment with EKS Roles'
+
+Parameters:
+  KeyPairName:
+    Type: "AWS::EC2::KeyPair::KeyName"
+    Default: "aws-kp-2"
+    Description: "AWS SSH Key Pair name for EC2 access"
+
+  ClusterName:
+    Type: String
+    Default: "get-started-eks"
+
+  VpcCidrBlock:
+    Type: String
+    Default: "10.0.0.0/16"
+
+  GravitonType:
+    Type: String
+    Default: "c7g.4xlarge"
+
+  X86Type:
+    Type: String
+    Default: "c6i.4xlarge"
+
+  # 1. 최신 AL2023 ARM64 AMI (Graviton용)
+  LatestAmiIdArm64:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64'
+
+  # 2. 최신 AL2023 x86_64 AMI (x86용)
+  LatestAmiIdX86:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidrBlock
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Ref ClusterName
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${ClusterName}-igw"
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Select [ 0, !Cidr [ !Ref VpcCidrBlock, 32, 8 ] ] # 10.0.0.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "GSE-pub-subnet-1"
+        - Key: "kubernetes.io/role/elb"
+          Value: "1"
+        - Key: !Sub "kubernetes.io/cluster/${ClusterName}"
+          Value: "owned"
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Select [ 1, !Cidr [ !Ref VpcCidrBlock, 32, 8 ] ] # 10.0.1.0/24
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "GSE-pub-subnet-2"
+        - Key: "kubernetes.io/role/elb"
+          Value: "1"
+        - Key: !Sub "kubernetes.io/cluster/${ClusterName}"
+          Value: "owned"
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Select [ 10, !Cidr [ !Ref VpcCidrBlock, 32, 8 ] ] # 10.0.10.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
+      Tags:
+        - Key: Name
+          Value: "GSE-priv-subnet-1"
+        - Key: "karpenter.sh/discovery"
+          Value: !Ref ClusterName
+        - Key: "kubernetes.io/role/internal-elb"
+          Value: "1"
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Select [ 11, !Cidr [ !Ref VpcCidrBlock, 32, 8 ] ] # 10.0.11.0/24
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
+      Tags:
+        - Key: Name
+          Value: "GSE-priv-subnet-2"
+        - Key: "karpenter.sh/discovery"
+          Value: !Ref ClusterName
+        - Key: "kubernetes.io/role/internal-elb"
+          Value: "1"
+
+  NatEip:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatEip.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub "${ClusterName}-nat"
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${ClusterName}-public-rt"
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${ClusterName}-private-rt"
+
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  PubSubnet1Assoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  PubSubnet2Assoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+
+  PrivSubnet1Assoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable
+
+  PrivSubnet2Assoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTable
+
+  BastionEKSAdminPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Minimum permissions for EKS and Karpenter setup
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: InfrastructureManagement
+            Effect: Allow
+            Action:
+              - "eks:*"
+              - "cloudformation:*"
+              - "ec2:RunInstances"
+              - "ec2:Describe*"
+              - "ec2:CreateTags"
+              - "ec2:AuthorizeSecurityGroupIngress"
+              - "ec2:CreateSecurityGroup"
+              - "ec2:DescribeSecurityGroups"
+              - "ec2:AuthorizeSecurityGroupIngress"
+              - "ec2:AuthorizeSecurityGroupEgress"
+              - "ec2:CreateLaunchTemplate"
+              - "ec2:DeleteLaunchTemplate"
+              - "ec2:CreateLaunchTemplateVersion"
+              - "ec2:DeleteLaunchTemplateVersions"
+              - "ec2:DescribeLaunchTemplates"
+              - "ec2:DescribeLaunchTemplateVersions"
+              - "ec2:ModifyLaunchTemplate"
+              - "iam:ListPolicyVersions"
+              - "iam:GetPolicyVersion"
+              - "iam:CreatePolicyVersion"
+              - "iam:DeletePolicyVersion"
+              - "iam:SetDefaultPolicyVersion"
+              - "iam:CreateInstanceProfile"
+              - "iam:DeleteInstanceProfile"
+              - "iam:GetInstanceProfile"
+              - "iam:TagInstanceProfile"
+              - "iam:AddRoleToInstanceProfile"
+              - "iam:RemoveRoleFromInstanceProfile"
+              - "iam:TagRole"
+              - "iam:TagPolicy"
+              - "iam:PassRole"
+              - "iam:CreateRole"
+              - "iam:DeletePolicy"
+              - "iam:CreatePolicy"
+              - "iam:AttachRolePolicy"
+              - "iam:UpdateAssumeRolePolicy"
+              - "iam:GetRole" 
+              - "iam:GetPolicy"
+              - "iam:ListAttachedRolePolicies"
+              - "iam:ListRolePolicies"
+              - "iam:ListInstanceProfilesForRole"
+              - "iam:GetRolePolicy"
+              - "iam:DeleteRole"
+              - "iam:DetachRolePolicy"
+              - "iam:PutRolePolicy"
+              - "iam:DeleteRolePolicy"
+              - "iam:GetOpenIDConnectProvider"
+              - "iam:CreateOpenIDConnectProvider"
+              - "iam:AddClientIDToOpenIDConnectProvider"
+              - "iam:UpdateOpenIDConnectProviderThumbprint"
+              - "iam:DeleteOpenIDConnectProvider"
+              - "iam:TagOpenIDConnectProvider"
+              - "iam:ListOpenIDConnectProviders"
+              - "iam:RemoveRoleFromInstanceProfile"            
+              - "sts:GetCallerIdentity"
+              - "ssm:GetParameter"
+              - "autoscaling:CreateAutoScalingGroup"
+              - "autoscaling:UpdateAutoScalingGroup"
+              - "autoscaling:DeleteAutoScalingGroup"
+              - "autoscaling:DescribeAutoScalingGroups"
+              - "autoscaling:DescribeAutoScalingInstances"
+              - "autoscaling:DescribeLaunchConfigurations"
+              - "autoscaling:SetDesiredCapacity"
+              - "autoscaling:TerminateInstanceInAutoScalingGroup"
+              - "autoscaling:CreateOrUpdateTags"
+              - "autoscaling:DescribeTags"
+            Resource: "*"
+          - Sid: KarpenterInfrastructure
+            Effect: Allow
+            Action:
+              - "sqs:*"
+              - "events:*"
+            Resource: "*"
+          - Sid: ECRManagement
+            Effect: Allow
+            Action:
+              - "ecr:CreateRepository"
+              - "ecr:TagResource"
+              - "ecr:GetAuthorizationToken"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+              - "ecr:PutImage"
+            Resource: "*"
+
+  EKSCreatorRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: GetStartedEKS_Role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Ref BastionEKSAdminPolicy
+
+  EKSCreatorProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: GetStartedEKS_Profile
+      Roles:
+        - !Ref EKSCreatorRole
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "eks-host-sg: SSH, VS Code Server, GitLab, Spring"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp # SSH
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp # VS Code Server (9090)
+          FromPort: 9090
+          ToPort: 9090
+          CidrIp: ${MY_IP}
+        - IpProtocol: tcp # Gitlab KAS
+          FromPort: 8150
+          ToPort: 8150
+          CidrIp: !GetAtt VPC.CidrBlock
+        - IpProtocol: tcp # Spring Web (8081-8090)
+          FromPort: 8081
+          ToPort: 8090
+          CidrIp: !GetAtt VPC.CidrBlock
+        - IpProtocol: tcp # HTTP (80)
+          FromPort: 80
+          ToPort: 80
+          CidrIp: ${MY_IP}
+        - IpProtocol: tcp # HTTPS/Gitlab (443)
+          FromPort: 443
+          ToPort: 443
+          CidrIp: ${MY_IP}
+
+  GravitonBox:
+    Type: AWS::EC2::Instance
+    Properties:
+      # SSM을 통해 최신 AL2023 ARM64 AMI 자동 참조
+      ImageId: !Ref LatestAmiIdArm64
+      InstanceType: !Ref GravitonType
+      KeyName: !Ref KeyPairName
+      SubnetId: !Ref PublicSubnet1 # VPC 템플릿의 서브넷 참조
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      IamInstanceProfile: GetStartedEKS_Profile
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo -u ec2-user -i <<'EC2_USER_SCRIPT'
+          curl -fsSL https://code-server.dev/install.sh | sh && sudo systemctl enable --now code-server@ec2-user
+          sleep 5
+          sed -i 's/127.0.0.1:8080/0.0.0.0:9090/g; s/^password: .*/password: code!@#c/g' /home/ec2-user/.config/code-server/config.yaml
+          EC2_USER_SCRIPT
+          echo 'export PS1="$(uname -m) \$ "' >> /home/ec2-user/.bashrc
+          sudo systemctl restart code-server@ec2-user
+      Tags:
+        - Key: Name
+          Value: gse-graviton-code
+
+  X86Box:
+    Type: AWS::EC2::Instance
+    Properties:
+      # SSM을 통해 최신 AL2023 x86_64 AMI 자동 참조
+      ImageId: !Ref LatestAmiIdX86
+      InstanceType: !Ref X86Type
+      KeyName: !Ref KeyPairName
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      IamInstanceProfile: GetStartedEKS_Profile
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo -u ec2-user -i <<'EC2_USER_SCRIPT'
+          curl -fsSL https://code-server.dev/install.sh | sh && sudo systemctl enable --now code-server@ec2-user
+          sleep 5
+          sed -i 's/127.0.0.1:8080/0.0.0.0:9090/g; s/^password: .*/password: code!@#c/g' /home/ec2-user/.config/code-server/config.yaml
+          EC2_USER_SCRIPT
+          echo 'export PS1="$(uname -m) \$ "' >> /home/ec2-user/.bashrc
+          sudo systemctl restart code-server@ec2-user
+      Tags:
+        - Key: Name
+          Value: gse-x86-code
+
+Outputs:
+  GravitonVsCode:
+    Description: "배스천 호스트 접속용 퍼블릭 DNS"
+    Value: !Sub "http://${GravitonBox.PublicDnsName}:9090"
+  X86VsCode:
+    Description: "VS Code 서버 접속 URL"
+    Value: !Sub "http://${X86Box.PublicDnsName}:9090"
