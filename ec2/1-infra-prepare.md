@@ -10,6 +10,7 @@ git clone https://github.com/gnosia93/vlm-distillation.git
 cd ~/vlm-distillation
 pwd
 
+
 MY_IP="$(curl -s https://checkip.amazonaws.com)""/32"
 sed -i "" "s|\${MY_IP}|$MY_IP|g" $(pwd)/src/cf/eks-vpc.yaml
 echo ${MY_IP}
