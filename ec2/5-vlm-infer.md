@@ -374,14 +374,7 @@ aws s3 cp "s3://vlm-data-499514681453-ap-northeast-2/finevideo/sports/09buIj5Z5l
 * s3 에 저장된 전체 영상 프레임에 대한 배치 인퍼런스 작성 -> 필요한 경우 k8s job 으로 실행.
 * "프롬프트 설계 및 출력 스키마 확정" 에서 만든 프롬프트 기반으로 출력 JSON 수정
   
-## 인스턴스 삭제 ##
 
-> [!WARNING]
-> GPU 인스턴스는 가용 수량이 제한적이고 시간당 비용도 비싸다.
-> 실습이 끝나면 이 단계에서 **반드시 삭제**해 불필요한 과금을 막는다.
-```
-aws ec2 terminate-instances --instance-ids $INSTANCE --region $REGION
-```
 
 
 
