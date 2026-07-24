@@ -12,11 +12,6 @@ VLM이므로, 이 부분은 zero-shot으로 직접 확인해봐야 한다.
 
 ubuntu GPU 인스턴스에서 zero-shot 테스트를 수행한다. 
 ```
-export REGION=ap-northeast-2
-export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
-VIDEO_ID=$(aws s3 ls $BUCKET/finevideo/sports/ 2>/dev/null | head -n1 | awk '{print $NF}' | tr -d '/')
-
 echo "\n-------------------------------------"
 echo "BUCKET: $BUCKET"
 echo "VIDEO_ID: $VIDEO_ID"
