@@ -12,7 +12,7 @@ VLM이므로, 이 부분은 zero-shot으로 직접 확인해봐야 한다.
 
 ubuntu GPU 인스턴스에서 zero-shot 테스트를 수행한다. 
 ```
-echo "\n-------------------------------------"
+echo -e "\n-------------------------------------"
 echo "BUCKET: $BUCKET"
 echo "VIDEO_ID: $VIDEO_ID"
 
