@@ -2,9 +2,9 @@
 
 본 워크샵에서는 70B+ 급 이상의 대규모 Vision-Language Model(VLM)을 teacher 모델로 활용해, 영상·이미지를 분석하고 1B 급의 경량 증류(distilled) 모델을 구축하는 방법을 다룹니다.
 전체 ML 파이프라인은 다음 흐름으로 구성됩니다. 
-```
-S3 영상 → 전처리 →  Teacher 지식 추출 → JSON 라벨 → 검수 → Student 학습 → 검증
-```
+
+![](https://github.com/gnosia93/vlm-distillation/blob/main/images/distillation-flow.png)
+
 대규모 VLM을 상시 서빙하는 대신, 배치 인퍼런스로 학습 데이터를 생성해 경량 모델로 증류함으로써 추론 비용을 크게 낮추는 것이 핵심입니다. 또한 CPU 중심 작업(영상 샘플링)은 Graviton에, GPU 집약 작업(VLM 인퍼런스·학습)은 GPU 노드풀에 배치해 워크로드별로 최적의 리소스를 사용합니다.
 
 teacher 모델로는 InternVL3-78B를, student 모델로는 같은 계열의 InternVL3-1B를 사용합니다. teacher와 student를 동일한 InternVL3 계열로 맞춘 이유는, 이미지 전처리 방식과 프롬프트·출력 포맷, 토크나이저가 모두 일관되어 데이터 생성부터 학습까지 하나의 전처리 파이프라인으로 관리할 수 있기 때문입니다. 이는 서로 다른 모델 계열을 조합할 때 발생하는 전처리·템플릿의 이중 관리 부담을 없애 워크샵의 흐름을 단순하게 유지해 줍니다.
