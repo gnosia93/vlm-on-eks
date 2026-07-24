@@ -15,6 +15,7 @@ INSTANCE=$(aws ssm describe-instance-information --region $REGION \
   --filters "Key=tag:Name,Values=model-infer" \
   --query "InstanceInformationList[].InstanceId" \
   --output text)
+  
 echo "INSTANCE: $INSTANCE"
 
 aws ssm start-session --target $INSTANCE --region $REGION
