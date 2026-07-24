@@ -69,13 +69,6 @@ frames.json (인퍼런스 단계의 입력 명세) 는 다음과 같습니다.
 
 ### 2. 영상 샘플링 하기 ###
 
-ffmpeg, jq 를 그라비톤 인스턴스에 설치합니다.
-```
-sudo apt update && sudo apt install -y ffmpeg jq
-ffmpeg -version
-jq --version
-```
-
 버킷 환경변수를 설정합니다.
 ```
 export REGION=ap-northeast-2
