@@ -103,7 +103,9 @@ aws iam put-role-policy \
 
 스트리밍하면서 대상 카테고리만 골라 로컬에 임시 저장후 S3 로 업로드 한다.
 ```
+sudo dnf install -y tmux
 tmux new -s ingest
+
 python3 prepare_finevideo.py
 ```
 [결과]
