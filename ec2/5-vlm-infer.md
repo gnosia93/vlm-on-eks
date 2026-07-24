@@ -90,13 +90,17 @@ NVIDIA L40S * 8
 hf-cache 디렉토리를 만들고 s3 에 저장된 모델 가중치를 GPU 인스턴스로 다운로드 한다.
 ```
 ls -ld /opt/dlami/nvme
-
 sudo mkdir -p /opt/dlami/nvme/hf-cache
 sudo chown ubuntu:ubuntu /opt/dlami/nvme/hf-cache
 
+# s5cmd 다운로드
+curl -L https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_Linux-64bit.tar.gz -o s5cmd.tar.gz
+tar xf s5cmd.tar.gz s5cmd
+sudo mv s5cmd /usr/local/bin/
+s5cmd version
+
 echo -e "\n-------------------------------------"
 echo "BUCKET: [ $BUCKET ]"
-
 s5cmd --numworkers 8 sync "s3://${BUCKET}/models/internvl3-78b/*" /opt/dlami/nvme/hf-cache/models/internvl3-78b/
 ```
 
