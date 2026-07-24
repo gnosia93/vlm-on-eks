@@ -237,22 +237,12 @@ aws --version
 hf 로 OpenGVLab/InternVL3-78B 모델의 가중치를 다운로드 받고, S3 로 업로드 한다. 
 > [!WARNING]
 > --local-dir flat 다운로드 방식의 특징과 주의점
-> hf download OpenGVLab/InternVL3-78B --local-dir <경로> 로 받으면, 모델 파일이 HuggingFace 캐시 구조(blobs/, snapshots/, refs/)가 아니라 한 폴더에
-  평평하게(flat) 펼쳐진 형태로 저장된다. config.json, *.safetensors, tokenizer.json 등이 지정한 디렉토리 바로 아래에 놓인다.
-> 주의점
->  - 이 flat 구조는 HuggingFace 캐시로 인식되지 않는다. 따라서 이 폴더를 ~/.cache/huggingface/hub/models--OpenGVLab--InternVL3-78B/ 위치에 그대로 넣어도 캐시
-  히트가 발생하지 않으며, 라이브러리가 캐시가 없다고 판단해 Hub에서 모델을 다시 다운로드한다.
-> - flat 구조는 심볼릭 링크가 없어 파일 중복이 발생하지 않으므로, 캐시 구조 대비 저장 용량이 작다. (캐시 구조를 S3에 --follow-symlinks로 업로드하면 원본과
-  링크 복제본이 모두 올라가 약 2배가 되는 반면, flat 방식은 그런 중복이 없다.)
-> - 심볼릭 링크가 없어 S3 업로드/다운로드 시 링크가 깨질 염려가 없고, 폴더 내용이 그대로 왕복되므로 S3를 경유하기에 적합한 구조다.
-> 로딩 시에는 이렇게 해야 한다
-> - 모델을 로드할 때 MODEL="OpenGVLab/InternVL3-78B" 처럼 Hub 저장소 ID로 지정하면 안 된다. Hub ID로 지정하면 라이브러리가 캐시 구조를 찾다가 flat 폴더를
-  인식하지 못한다.
-> - 대신 flat 폴더의 로컬 경로를 직접 지정해야 한다. 예: MODEL="/models/internvl3-78b". vLLM·transformers는 해당 경로 아래에 config.json과 *.safetensors가
-  존재하면 캐시 구조와 무관하게 모델을 직접 로드한다.
-> - 오프라인 환경에서 실수로 재다운로드가 일어나지 않도록 HF_HUB_OFFLINE=1 환경변수를 함께 설정하는 것을 권장한다.
-> - 이때 tokenizer.json, tokenizer_config.json, vocab.json, merges.txt 등 토크나이저 파일도 같은 flat 폴더 안에 포함되어 있어야 한다. (--local-dir
-  다운로드에는 기본적으로 포함된다.)  
+>
+> hf download ... --local-dir <경로>로 받으면 파일이 HF 캐시 구조(blobs/snapshots/)가 아니라 한 폴더에 평평하게(flat) 저장된다
+> - 캐시로 인식 안 됨: hf-cache 위치에 넣어도 캐시 히트가 안 되고 Hub에서 재다운로드한다.
+> - 용량 이점: 심볼릭 링크가 없어 중복이 없고, S3 왕복 시 링크 깨짐 걱정도 없어 S3 경유에 적합하다.
+>
+> 로딩 시: MODEL을 Hub ID("OpenGVLab/InternVL3-78B")가 아니라 로컬 경로("/models/internvl3-78b")로 직접 지정해야 한다. HF_HUB_OFFLINE=1도 함께 설정 권장
 ```
 export PATH=$PATH:/home/ubuntu/.local/bin
 sudo mkdir -p /mnt/data
