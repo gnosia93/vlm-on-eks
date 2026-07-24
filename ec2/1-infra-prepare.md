@@ -255,10 +255,10 @@ aws ec2 describe-security-groups \
 +----------------------------------------+---------------------------------------------+
 |                   Key                  |                    Value                    |
 +----------------------------------------+---------------------------------------------+
-|  aws:eks:cluster-name                  |  get-started-eks                            |
+|  aws:eks:cluster-name                  |  vlm-distillation                            |
 |  kubernetes.io/cluster/get-started-eks |  owned                                      |
-|  Name                                  |  eks-cluster-sg-get-started-eks-1608279370  |
-|  karpenter.sh/discovery                |  get-started-eks                            |
+|  Name                                  |  eks-cluster-sg-vlm-distillation-1608279370  |
+|  karpenter.sh/discovery                |  vlm-distillation                            |
 +----------------------------------------+---------------------------------------------+
 ```
 
