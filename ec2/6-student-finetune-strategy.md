@@ -8,7 +8,25 @@ VLM이므로, 이 부분은 zero-shot으로 직접 확인해봐야 한다.
 이 zero-shot 측정 결과에 따라 파인튜닝 전략을 정하는데, 기본 능력이 어느 정도 갖춰져 있고 시간적 이해만 보완하면 되는 수준이라면 LoRA로 가볍게 튜닝하고,
 정렬이나 시간적 이해가 크게 부족해 모델을 폭넓게 재학습해야 한다면 Full 파인튜닝을 선택한다.
 
-### zero-shot 테스트 ###
+### 1. 인스턴스 접속하기 ###
+생성된 인스턴스를 조회하고, system manager를 이용하여 로그인한다.
+
+INSTANCE=$(aws ssm describe-instance-information --region $REGION \
+  --filters "Key=tag:Name,Values=model-infer" \
+  --query "InstanceInformationList[].InstanceId" \
+  --output text)
+echo "INSTANCE: $INSTANCE"
+
+aws ssm start-session --target $INSTANCE --region $REGION
+
+sudo su ubuntu
+nvidia-smi --query-gpu=name --format=csv,noheader | awk 'END{print $0" * "NR}'
+[결과]
+```
+NVIDIA L40S * 8
+```
+
+### 2. zero-shot 테스트 ###
 
 ```
 docker run --rm -it --gpus all --shm-size=16g \
