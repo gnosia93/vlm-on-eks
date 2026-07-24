@@ -13,6 +13,7 @@ FineVideo는 약 43,000개의 영상, 총 3,400시간 분량으로 구성된 대
 
 ```
 TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
 export REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export SG_ID=$(aws ec2 describe-security-groups --region $REGION \
@@ -25,7 +26,7 @@ export SUBNET_ID=$(aws ec2 describe-subnets --region $REGION \
   --output text)
 export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
 
-echo "\n-------------------------------------"
+echo -e "\n-------------------------------------"
 echo "REGION: $REGION"
 echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "SG_ID: $SG_ID"
