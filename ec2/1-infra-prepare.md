@@ -641,7 +641,7 @@ torchtune-llama3.2-3b    9s
 torchtune-qwen2.5-1.5b   9s
 ```
 
-torch-distributed 런타임을 아래와 같이 수정한다. 
+**_(Optional)_** torch-distributed 런타임을 아래와 같이 수정한다. 
 ```
 kubectl edit clustertrainingruntime torch-distributed 
 ```
