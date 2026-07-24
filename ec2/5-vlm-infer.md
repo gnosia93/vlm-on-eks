@@ -99,8 +99,14 @@ tar xf s5cmd.tar.gz s5cmd
 sudo mv s5cmd /usr/local/bin/
 s5cmd version
 
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+export REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
+export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
+
 echo -e "\n-------------------------------------"
 echo "BUCKET: [ $BUCKET ]"
+
 s5cmd --numworkers 8 sync "s3://${BUCKET}/models/internvl3-78b/*" /opt/dlami/nvme/hf-cache/models/internvl3-78b/
 ```
 
