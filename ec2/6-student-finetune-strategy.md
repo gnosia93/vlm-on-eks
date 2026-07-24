@@ -62,7 +62,17 @@ docker run --rm -it --gpus 1 --shm-size=16g \
 → 인구가 줄어들고 경기장에서 경기 진행에 대한 정보가 표시된 TV 시리즈의 텍스트가 등장합니다. 캠프는 14.5초 전에 113/1을 기록한 것으로 보인다. 경기장에는 경기장의 레이블이 높은 레이블이 부착되어 있으며, 경기장의 레이블은 "WILLS"로 표시되어 있습니다. 경기장에는 경기장의 레이블이 높은 레이블이 부착되어 있으며, 경기장의 레이블은 "WILLS"로 표시되어 있습니다.
 ------------------------------------------------------------
 [temporal] 프레임 순서대로 장면이 어떻게 변하는지 시간 순서대로 한국어로 설명해줘.
-→ The video starts with a scene of a bowler delivering a ball to a batsman, who is wearing a light blue uniform. The bowler is in a green uniform, and the batsman is in a green and yellow uniform. The scoreboard shows 'PAK 104/1' with 'Target 288 (40)' and 'Overs 14'. The batsman hits the ball, and the ball is seen flying towards the boundary. The next scene shows the ball hitting the boundary, and the batsman is seen running towards the wicketkeeper. The scoreboard updates to 'PAK 107/1' with 'Target 288 (40)' and 'Overs 14.2'. The scene then shifts to a different player in a light blue uniform standing near the boundary, with the scoreboard showing 'PAK 113/1' and 'Target 288 (40)'. The final scene of the first clip shows a player in a green uniform standing near the boundary, with the scoreboard showing 'PAK 113/2' and 'Target 288 (40)'. The video concludes with a group of players celebrating on the field.
+→ The video starts with a scene of a bowler delivering a ball to a batsman, who is wearing a light blue uniform.
+The bowler is in a green uniform, and the batsman is in a green and yellow uniform.
+The scoreboard shows 'PAK 104/1' with 'Target 288 (40)' and 'Overs 14'. The batsman hits the ball,
+and the ball is seen flying towards the boundary. The next scene shows the ball hitting the boundary,
+and the batsman is seen running towards the wicketkeeper.
+The scoreboard updates to 'PAK 107/1' with 'Target 288 (40)' and 'Overs 14.2'.
+The scene then shifts to a different player in a light blue uniform standing near the boundary,
+with the scoreboard showing 'PAK 113/1' and 'Target 288 (40)'.
+The final scene of the first clip shows a player in a green uniform standing near the boundary,
+with the scoreboard showing 'PAK 113/2' and 'Target 288 (40)'.
+The video concludes with a group of players celebrating on the field.
 ------------------------------------------------------------
 [action] 영상 속 인물이 어떤 동작을 하고 있는지 한국어로 알려줘.
 → The batsman is standing and looking at the ball.
@@ -70,8 +80,8 @@ docker run --rm -it --gpus 1 --shm-size=16g \
 [sport] 이 영상의 스포츠 종목을 한 단어로만 답해줘.
 → cricket
 ============================================================
-[rank0]:[W723 22:10:58.760828911 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
 ```
+
 화면에 프롬프트 4개(caption/temporal/action/sport)의 응답이 출력됩니다. 
 특히 temporal 응답을 teacher(78B)의 크리켓 설명과 비교해보면 1B의 시간 이해 수준을 파악할 수 있습니다.
 
