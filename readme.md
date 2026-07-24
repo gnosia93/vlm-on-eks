@@ -19,7 +19,7 @@ teacher 모델로는 InternVL3-78B를, student 모델로는 같은 계열의 Int
 ### ■ _Part 1. Basic (EC2 단일 노드 검증)_ ###
 
 * [1. 기반 인프라 구축 - VPC부터 EKS 클러스터까지](https://github.com/gnosia93/vlm-distillation/blob/main/ec2/1-infra-prepare.md)
-* [2. 데이터셋 / 모델 가중치 다운로드](https://github.com/gnosia93/vlm-on-eks/blob/main/ec2/2-preparing-datasets.md)
+* [2. 데이터셋 / 모델 가중치 다운로드](https://github.com/gnosia93/vlm-distillation/blob/main/ec2/2-prepare-dataset.md)
 * [3. 프롬프트 설계 및 출력 스키마 확정](https://github.com/gnosia93/vlm-distillation/blob/main/ec2/3-prompt-design.md)
 * [4. 프레임 샘플링](https://github.com/gnosia93/vlm-on-eks/blob/main/ec2/4-frame-sampling.md)
 * [5. InternVL3-78B 기반 학습 데이터 생성 (영상 자동 라벨링)](https://github.com/gnosia93/vlm-on-eks/blob/main/ec2/5-vlm-infer.md)
