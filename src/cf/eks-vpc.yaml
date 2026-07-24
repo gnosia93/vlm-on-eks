@@ -315,7 +315,7 @@ Resources:
       # SSM을 통해 최신 AL2023 x86_64 AMI 자동 참조
       ImageId: !Ref LatestAmiIdX86
       InstanceType: !Ref X86Type
-      KeyName: !Ref KeyPairName
+#      KeyName: !Ref KeyPairName
       SubnetId: !Ref PublicSubnet1
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
