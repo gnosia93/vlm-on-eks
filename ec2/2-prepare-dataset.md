@@ -171,8 +171,8 @@ aws s3 cp s3://$BUCKET/finevideo/sports/manifest.json - | jq .
 {
   "category": "Sports",
   "prefix": "finevideo/sports",
-  "total_videos": 25,
-  "n_shards": 10
+  "total_videos": 26,
+  "n_shards": 20
 }
 ```
 영상에 대한 상세 정보를 가지고 있는 manifest.jsonl 을 조회한다.
