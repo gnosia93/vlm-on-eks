@@ -34,18 +34,17 @@ OUTPUT=$(aws cloudformation describe-stacks --region ${AWS_REGION} \
   --stack-name vlm-distillation \
   --query "Stacks[0].Outputs[?OutputKey=='X86VsCode'].\
   {Name: OutputKey, Value: OutputValue}" \
-  --output table)
+  --output json)
 echo ${OUTPUT}
 ```
 [결과]
 ```
--------------------------------------------------------------------------------------------
-|                                     DescribeStacks                                      |
-+----------------+------------------------------------------------------------------------+
-|      Name      |                                 Value                                  |
-+----------------+------------------------------------------------------------------------+
-|  X86VsCode     |  http://ec2-54-180-202-252.ap-northeast-2.compute.amazonaws.com:9090   |
-+----------------+------------------------------------------------------------------------+
+[
+    {
+        "Name": "X86VsCode",
+        "Value": "http://ec2-43-201-103-189.ap-northeast-2.compute.amazonaws.com:8080"
+    }
+]
 ```
 
 ## vpc 삭제하기 ##
