@@ -1,8 +1,8 @@
-"""g7e.24xlarge 1대(GPU 4장)에서 InternVL3-78B TP=4 인퍼런스 최소 예제.
+""" InternVL3-78B 인퍼런스 mock 데이터 활용 예제.
 
 - 입력: 코드에서 즉석 생성하는 mock 이미지 (외부 파일 불필요)
-- 모델: OpenGVLab/InternVL3-78B, 텐서 병렬 4
-- 실행: python simple_infer.py
+- 모델: OpenGVLab/InternVL3-78B, 텐서 병렬 
+- 실행: python mock_infer.py
 """
 from __future__ import annotations
 
@@ -47,11 +47,10 @@ def build_prompt(tokenizer, prompt: str) -> str:
 def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained(MODEL, trust_remote_code=True)
 
-    num_gpus = torch.cuda.device_count()    
+    num_gpus = torch.cuda.device_count()     # 노드의 GPU 숫자 확인
     llm = LLM(
         model=MODEL,
-     #   tensor_parallel_size=4,          # GPU 4장에 모델을 나눠 올림
-        tensor_parallel_size=num_gpus,    # 노드의 모든 GPU 활용
+        tensor_parallel_size=num_gpus,       # 노드의 모든 GPU 활용
         max_model_len=8192,
         gpu_memory_utilization=0.92,
         dtype="bfloat16",
