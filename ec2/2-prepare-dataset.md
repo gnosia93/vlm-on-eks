@@ -69,6 +69,38 @@ python3 inspect_pl.py
 
 
 ### 4. 다운로드 및 S3 적재 ###
+S3 에 접근 가능하도록 설정한다.  
+```
+cat > s3-policy.json <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VlmDataBucketRW",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::${BUCKET}/*"
+    },
+    {
+      "Sid": "VlmDataBucketList",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::${BUCKET}"
+    }
+  ]
+}
+EOF
+
+aws iam put-role-policy \
+  --role-name VlmEKS_Role \
+  --policy-name VlmDataS3Access \
+  --policy-document file://s3-policy.json
+```
+
 스트리밍하면서 대상 카테고리만 골라 로컬에 임시 저장후 S3 로 업로드 한다.
 ```
 TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
