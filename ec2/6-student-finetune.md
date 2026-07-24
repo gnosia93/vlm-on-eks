@@ -85,5 +85,20 @@ python train_student.py --data data/train.jsonl --out out/student-ft --bs 4 --ac
 ```
 
 
+## 인스턴스 삭제 ##
+
+> [!WARNING]
+> GPU 인스턴스는 가용 수량이 제한적이고 시간당 비용도 비싸다.
+> 다음 단계로 넘어가기 전에 **반드시 삭제**한다.
+
+ubuntu GPU 인스턴스에서 exit 명령어를 두번 수행하셔 vs-code ec2 인스턴스로 돌아온 다음 (프롬프트는 x86_64 이다), GPU 인스턴스를 삭제한다. 
+```
+echo -e "\n-------------------------------------"
+echo "INSTANCE: [ $INSTANCE ]"
+echo "REGION: [ $REGION ]"
+
+aws ec2 terminate-instances --instance-ids $INSTANCE --region $REGION
+```
+
 
 
