@@ -619,9 +619,10 @@ Kubeflow Trainer의 주된 존재 이유는 여러 노드에 걸친 파드들을
 
 반면 멀티 노드 환경에서는 상황이 다릅니다. 노드마다 파드를 띄우고 이들이 서로를 찾아 통신하도록 만드는 작업, 즉 MASTER_ADDR와 MASTER_PORT 설정, WORLD_SIZE와 rank 할당, rendezvous, headless service, gang scheduling 등이 필요한데, 이를 직접 구성하기는 상당히 번거롭습니다. Kubeflow Trainer는 바로 이 복잡한 조율 과정을 대신 처리해 준다는 점에서 멀티 노드 학습에 진가를 발휘합니다.
 
+* https://github.com/kubeflow/trainer/releases
 ```
 sudo dnf install git -y
-export VERSION=v2.1.0
+export VERSION=v2.2.1
 kubectl apply --server-side -k "https://github.com/kubeflow/trainer.git/manifests/overlays/manager?ref=${VERSION}"
 ```
 10 초 정도 지나후에 클러스터 트레이닝런타임을 설치한다. 
