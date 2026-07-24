@@ -8,27 +8,9 @@ VLM이므로, 이 부분은 zero-shot으로 직접 확인해봐야 한다.
 이 zero-shot 측정 결과에 따라 파인튜닝 전략을 정하는데, 기본 능력이 어느 정도 갖춰져 있고 시간적 이해만 보완하면 되는 수준이라면 LoRA로 가볍게 튜닝하고,
 정렬이나 시간적 이해가 크게 부족해 모델을 폭넓게 재학습해야 한다면 Full 파인튜닝을 선택한다.
 
-### 1. 인스턴스 접속하기 ###
-생성된 인스턴스를 조회하고, system manager를 이용하여 로그인한다.
-```
-INSTANCE=$(aws ssm describe-instance-information --region $REGION \
-  --filters "Key=tag:Name,Values=model-infer" \
-  --query "InstanceInformationList[].InstanceId" \
-  --output text)
-echo "INSTANCE: $INSTANCE"
+### 1. zero-shot 테스트 ###
 
-aws ssm start-session --target $INSTANCE --region $REGION
-
-sudo su ubuntu
-nvidia-smi --query-gpu=name --format=csv,noheader | awk 'END{print $0" * "NR}'
-```
-[결과]
-```
-NVIDIA L40S * 8
-```
-
-### 2. zero-shot 테스트 ###
-
+ubuntu GPU 인스턴스에서 zero-shot 테스트를 수행한다. 
 ```
 export REGION=ap-northeast-2
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
@@ -139,6 +121,13 @@ LoRA를 권하는 이유:
 - student가 크리켓을 야구로 착각하거나, 스코어보드를 못 읽거나, temporal에서 프레임을 뒤섞어 순서가 엉켰다면 → 이해 자체가 안 되는 것 → Full 고려.
 - 지금은 그 반대예요. 이해는 하는데 표현만 안 맞음.
 
+## 인스턴스 삭제 ##
 
+> [!WARNING]
+> GPU 인스턴스는 가용 수량이 제한적이고 시간당 비용도 비싸다.
+> 실습이 끝나면 이 단계에서 **반드시 삭제**해 불필요한 과금을 막는다.
+```
+aws ec2 terminate-instances --instance-ids $INSTANCE --region $REGION
+```
 
 
