@@ -227,14 +227,19 @@ export PATH=$PATH:/home/ubuntu/.local/bin
 sudo mkdir -p /mnt/data
 sudo chown ec2-user:ec2-user /mnt/data
 
+# s5cmd 다운로드
+curl -L https://github.com/peak/s5cmd/releases/latest/download/s5cmd_*_Linux-amd64.tar.gz -o s5cmd.tar.gz
+tar xf s5cmd.tar.gz s5cmd
+sudo mv s5cmd /usr/local/bin/
+
 # flat 구조로 다운로드
 hf download OpenGVLab/InternVL3-78B --local-dir /mnt/data/internvl3-78b
 hf download OpenGVLab/InternVL3-1B --local-dir /mnt/data/internvl3-1b
 
 # S3에 업로드 (flat 그대로)
 echo "model weight loading in [ $BUCKET ]"
-aws s3 sync /mnt/data/internvl3-78b/ s3://${BUCKET}/models/internvl3-78b/
-aws s3 sync /mnt/data/internvl3-1b/ s3://${BUCKET}/models/internvl3-1b/
+s5cmd --numworkers 8 sync /mnt/data/internvl3-78b/ s3://${BUCKET}/models/internvl3-78b/
+s5cmd --numworkers 8 sync /mnt/data/internvl3-1b/ s3://${BUCKET}/models/internvl3-1b/
 
 # S3 확인
 aws s3 ls s3://${BUCKET}/models/internvl3-78b/ 2>/dev/null | head -n 15
