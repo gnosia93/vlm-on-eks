@@ -41,4 +41,4 @@ teacher 모델로는 InternVL3-78B를, student 모델로는 같은 계열의 Int
 ## Appendix ##
 
 * [PyTorch DDP 통신 토폴로지 및 멀티 노드 네트워크 최적화](https://github.com/gnosia93/vlm-distillation/blob/main/appendix/ddp-communication-topology.md)
-* https://www.youtube.com/watch?v=lY8vmKrFVew
+* [PyTorch를 사용하여 처음부터 VLM(비전 언어 모델)을 구현하고 학습시키기](https://www.youtube.com/watch?v=lY8vmKrFVew)
