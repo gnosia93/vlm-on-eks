@@ -71,7 +71,9 @@ frames.json (인퍼런스 단계의 입력 명세) 는 다음과 같습니다.
 
 버킷 환경변수를 설정합니다.
 ```
-export REGION=ap-northeast-2
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+export REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
 
@@ -81,7 +83,7 @@ echo "BUCKET: $BUCKET"
 
 sample_frames.sh 과 xargs 를 이용하여 영상 샘플링을 병렬로 처리 합니다.
 ```
-cd ~/vlm-on-eks/src
+cd ~/vlm-distillation/src
 chmod +x sample_frames.sh
 
 aws s3 cp "s3://${BUCKET}/finevideo/sports/manifest.jsonl" - \
