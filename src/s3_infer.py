@@ -21,7 +21,8 @@ from PIL import Image
 from transformers import AutoTokenizer
 from vllm import LLM, SamplingParams
 
-MODEL = "OpenGVLab/InternVL3-78B"
+#MODEL = "OpenGVLab/InternVL3-78B"            
+MODEL = "/models/internvl3-78b"            # flat 경로로 부터 읽는다. 
 BUCKET = os.environ["BUCKET"]              # 없으면 KeyError로 즉시 중단
 DEFAULT_PROMPT = "이 영상의 프레임들을 보고 무슨 일이 일어나는지 한국어로 설명해줘."
 
