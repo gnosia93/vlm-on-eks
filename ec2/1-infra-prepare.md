@@ -3,7 +3,6 @@
 
 ```
 export AWS_REGION="ap-northeast-2"
-export KEYPAIR_NAME="no-key"
 
 cd ~
 git clone https://github.com/gnosia93/vlm-distillation.git
@@ -19,7 +18,6 @@ aws cloudformation create-stack \
   --region ${AWS_REGION} \
   --stack-name vlm-distillation \
   --template-body file://$(pwd)/cf/eks-vpc.yaml \
-  --parameters ParameterKey=KeyPairName,ParameterValue=${KEYPAIR_NAME} \
   --capabilities CAPABILITY_NAMED_IAM \
   --tags Key=Project,Value=vlm-distillation
 ```
