@@ -229,9 +229,10 @@ sudo mkdir -p /mnt/data
 sudo chown ec2-user:ec2-user /mnt/data
 
 # s5cmd 다운로드
-curl -L https://github.com/peak/s5cmd/releases/latest/download/s5cmd_*_Linux-amd64.tar.gz -o s5cmd.tar.gz
+curl -L https://github.com/peak/s5cmd/releases/download/v2.3.0/s5cmd_2.3.0_Linux-64bit.tar.gz -o s5cmd.tar.gz
 tar xf s5cmd.tar.gz s5cmd
 sudo mv s5cmd /usr/local/bin/
+s5cmd version
 
 # flat 구조로 다운로드
 hf download OpenGVLab/InternVL3-78B --local-dir /mnt/data/internvl3-78b
