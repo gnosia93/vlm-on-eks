@@ -13,5 +13,6 @@ aws s3api delete-bucket --bucket $BUCKET --region $REGION  # 그다음 버킷 �
 
 ### vpc 삭제 ###
 ```
+CF_STACK=$(cat CF_STACK | awk '{print $2}')
 aws cloudformation delete-stack --stack-name ${CF_STACK} --region $AWS_REGION
 ```
