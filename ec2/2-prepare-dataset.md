@@ -34,55 +34,15 @@ echo "SUBNET_ID(2nd): $SUBNET_ID"
 echo "BUCKET: $BUCKET"
 ```
 
-데이터 준비 단계에서는 네트워크 대역폭과 디스크 성능이 좋은 CPU 인스턴스가 필요하다.
-* 인스턴스: m7g.4xlarge
-* 스토리지: 임시 스크래치용 로컬 NVMe 있는 타입이면 좋고, 없으면 EBS gp3 500GB~1TB.
-* S3 버킷으로 다운로드 받은 파일을 업로드하므로 S3 쓰기 권한(vlm-s3-access) 이 필요하다.
-
+ffmpeg 및 hf 패키지를 설치한다. 
 ```
-AMI_ID=$(aws ssm get-parameter \
-  --region $REGION \
-  --name /aws/service/canonical/ubuntu/server/22.04/stable/current/arm64/hvm/ebs-gp2/ami-id \
-  --query 'Parameter.Value' --output text)
-echo $AMI_ID
+sudo dnf install -y python3-pip tar xz
 
-aws ec2 run-instances \
-  --region $REGION \
-  --image-id $AMI_ID \
-  --instance-type m7g.4xlarge \
-  --security-group-ids $SG_ID \
-  --subnet-id $SUBNET_ID \
-  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":600,"VolumeType":"gp3","Throughput":500,"Iops":6000,"DeleteOnTermination":true}}]' \
-  --iam-instance-profile Name=vlm-ec2-profile \
-  --instance-initiated-shutdown-behavior terminate \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=data-preprocessing}]' \
-  --count 1
-```
+curl -L https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz -o ffmpeg.tar.xz
+tar xf ffmpeg.tar.xz
+sudo cp ffmpeg-*-static/ffmpeg ffmpeg-*-static/ffprobe /usr/local/bin/
+ffmpeg -version
 
-### 3. 인스턴스 접속하기 ####
-system manager 를 이용하여 인스턴스에 접속 한다. 클라이이언트가 맥 os 인 경우 플러그인을 설치가 필요하다. 
-```
-brew install --cask session-manager-plugin
-```
-
-접속할 인스턴스를 조회하고, system manager 를 이용하여 로그인한다.  
-```
-INSTANCE=$(aws ssm describe-instance-information --region $REGION \
-  --filters "Key=tag:Name,Values=data-preprocessing" \
-  --query "InstanceInformationList[].InstanceId" \
-  --output text)
-echo "INSTANCE: $INSTANCE"
-
-aws ssm start-session --target $INSTANCE --region $REGION
-
-sudo su ubuntu
-```
-
-
-인스턴스로 접속한 후 ffmpeg 및 hf 패키지를 설치한다. 
-```
-cd
-sudo apt-get update && sudo apt-get install -y python3-pip ffmpeg
 pip install "datasets>=3.0" huggingface_hub hf_transfer boto3
 ```
 
