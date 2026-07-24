@@ -521,6 +521,59 @@ Wed Dec 10 06:44:46 2025
 +-----------------------------------------------------------------------------------------+
 ```
 
+## EFA ##
+
+### 1. EFA 플러그인 설치 ###
+```
+helm repo add eks https://aws.github.io/eks-charts
+helm install aws-efa-k8s-device-plugin eks/aws-efa-k8s-device-plugin --namespace kube-system
+
+kubectl patch ds aws-efa-k8s-device-plugin -n kube-system --type='json' -p='[
+  {"op": "add", "path": "/spec/template/spec/tolerations/-", "value": {"operator": "Exists"}}
+]'
+
+kubectl get ds aws-efa-k8s-device-plugin -n kube-system
+```
+
+### 2. EFA 테스트 ###
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: efa-test-pod
+  labels:
+    app: efa-test
+spec:
+  nodeSelector:
+    karpenter.sh/nodepool: gpu                
+  tolerations:                                             
+    - key: "nvidia.com/gpu"
+      operator: "Exists"                      # 노드의 테인트는 nvidia.com/gpu=present:NoSchedule 이나, Exists 연산자로 nvidia.com/gpu 키만 체크  
+      effect: "NoSchedule"
+#    - key: "vpc.amazon.com/efa"              # 카펜터 gpu 풀의 노드들은 nvidia.com/gpu 테인트만 가지고 있다.
+#      operator: "Exists"                       
+#      effect: "NoSchedule"        
+  containers:
+    - name: efa-container                               # public.ecr.aws/deep-learning-containers/pytorch-training:2.8.0-gpu-py312-cu129-ubuntu22.04-ec2-v1.0 
+      image: public.ecr.aws/hpc-cloud/nccl-tests:latest           # EFA 드라이버와 NCCL 테스트 도구가 포함된 이미지 사용 (NVIDIA 공식 이미지 권장)
+      command: ["/bin/bash", "-c", "sleep infinity"]
+      resources:
+        limits:
+          vpc.amazonaws.com/efa: 1                      # EFA 장치를 파드에 직접 할당 (VPC CNI가 이 장치를 인식함)
+          nvidia.com/gpu: 1                             # GPU 인스턴스인 경우
+      securityContext:
+        capabilities:                                   # EFA 통신을 위해 메모리 잠금 권한 필요
+          add: ["IPC_LOCK"]
+EOF
+```
+efa-test-pod 파드에 로그인하여 efa 디바이스 정보를 조회한다. 
+```
+kubectl exec -it efa-test-pod -- /bin/bash
+fi_info -p efa
+ls -la /sys/class/infiniband/
+```
+
 
 
 
