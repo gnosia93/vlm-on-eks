@@ -299,8 +299,26 @@ INFO 07-23 20:50:22 multiproc_worker_utils.py:140] Terminating local vLLM worker
 [rank0]:[W723 20:50:29.194266029 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
 ```
 
-### 5. S3 로 업로드 된 인퍼런스 결과 확인하기 ###
+### 5. S3 인퍼런스 결과 확인하기 ###
+인퍼런스 결과는 s3 에 아래와 같은 구조로 저장된다. 
+```
+ s3://vlm-data-${ACCOUNT_ID}-${REGION}/
+  └── finevideo/
+      └── sports/
+          └── 09buIj5Z5lk/
+              ├── video.mp4                    # 원본 영상 (기존)
+              ├── metadata.json                # 메타/전사 (기존)
+              ├── frames/                      # 프레임 추출 (Graviton)
+              │   ├── frame_001.jpg
+              │   ├── frame_002.jpg
+              │   ├── ...
+              │   ├── frame_016.jpg
+              │   └── frames.json              # 프레임 목록 + 샘플링 설정 (hash=d587a6)
+              └── inference/                   # 추론 결과 (GPU 노드)
+                  └── 042dd539417d.json        # ← 인퍼런스 결과
+```
 
+인퍼런스 결과 파일의 내용을 조회한다. 
 ```
 aws s3 cp "s3://vlm-data-499514681453-ap-northeast-2/finevideo/sports/09buIj5Z5lk/inference/042dd539417d.json" - | jq
 ```
