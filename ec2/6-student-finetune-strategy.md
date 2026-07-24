@@ -39,7 +39,10 @@ echo "\n-------------------------------------"
 echo "BUCKET: $BUCKET"
 echo "VIDEO_ID: $VIDEO_ID"
 
+aws s3 sync s3://${BUCKET}/models/internvl3-1b/ /opt/dlami/nvme/hf-cache/models/internvl3-1b/
+
 cd ~/vlm-distillation/src
+
 docker run --rm -it --gpus all --shm-size=16g \
   -v $(pwd):/work -w /work \
   -v /opt/dlami/nvme/hf-cache/models:/models \
