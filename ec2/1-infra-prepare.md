@@ -457,7 +457,6 @@ kubectl apply -f nodepool-gpu.yaml
 ```
 Ready 상태값이 True 임을 확인한다. 
 ```
-
 kubectl get ec2nodeclass,nodepool
 ```
 [결과]
