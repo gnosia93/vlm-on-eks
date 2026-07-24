@@ -121,6 +121,8 @@ LoRA를 권하는 이유:
 > [!WARNING]
 > GPU 인스턴스는 가용 수량이 제한적이고 시간당 비용도 비싸다.
 > 실습이 끝나면 이 단계에서 **반드시 삭제**해 불필요한 과금을 막는다.
+
+ubuntu GPU 인스턴스에서 exit 명령어를 두번 수행하셔 vs-code ec2 인스턴스로 돌아온 다음 (프롬프트는 x86_64 이다), GPU 인스턴스를 삭제한다. 
 ```
 aws ec2 terminate-instances --instance-ids $INSTANCE --region $REGION
 ```
