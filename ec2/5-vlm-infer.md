@@ -65,7 +65,7 @@ aws ec2 run-instances \
 
 
 ### 2. 인스턴스 접속하기 ###
-생성된 인스턴스를 조회하고, system manager를 이용하여 로그인한다.  
+생성된 ubuntu 인스턴스를 조회하고, system manager를 이용하여 로그인한다.  
 ```
 INSTANCE=$(aws ssm describe-instance-information --region $REGION \
   --filters "Key=tag:Name,Values=model-infer" \
@@ -99,6 +99,7 @@ tar xf s5cmd.tar.gz s5cmd
 sudo mv s5cmd /usr/local/bin/
 s5cmd version
 
+# 환경변수 설정
 TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 export REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
