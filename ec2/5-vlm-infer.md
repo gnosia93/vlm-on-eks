@@ -76,7 +76,7 @@ echo "INSTANCE: $INSTANCE"
 sudo dnf install -y https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm
 aws ssm start-session --target $INSTANCE --region $REGION
 
-sudo su ubuntu
+sudo su ec2-user
 nvidia-smi --query-gpu=name --format=csv,noheader | awk 'END{print $0" * "NR}'
 ```
 
