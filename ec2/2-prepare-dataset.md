@@ -103,16 +103,6 @@ aws iam put-role-policy \
 
 스트리밍하면서 대상 카테고리만 골라 로컬에 임시 저장후 S3 로 업로드 한다.
 ```
-TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
-MAC=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/mac)
-ACCOUNT_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
-  http://169.254.169.254/latest/meta-data/network/interfaces/macs/${MAC}/owner-id)
-
-export ACCOUNT_ID REGION
-export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
-echo "BUCKET: $BUCKET"
-
 tmux new -s ingest
 python3 prepare_finevideo.py
 ```
