@@ -12,14 +12,15 @@ FineVideo는 약 43,000개의 영상, 총 3,400시간 분량으로 구성된 대
 ### 2. EC2 생성하기 ###
 
 ```
-export REGION=ap-northeast-2
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+export REGION=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
 export SG_ID=$(aws ec2 describe-security-groups --region $REGION \
   --filters "Name=group-name,Values=vlm-sg" \
   --query "SecurityGroups[].GroupId" \
   --output text)
 export SUBNET_ID=$(aws ec2 describe-subnets --region $REGION \
-  --filters "Name=tag:Name,Values=vlm-public-subnet" \
+  --filters "Name=tag:Name,Values=vlm-pub-subnet-2" \
   --query "Subnets[0].SubnetId" \
   --output text)
 export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
@@ -28,7 +29,7 @@ echo "\n-------------------------------------"
 echo "REGION: $REGION"
 echo "ACCOUNT_ID: $ACCOUNT_ID"
 echo "SG_ID: $SG_ID"
-echo "SUBNET_ID: $SUBNET_ID"
+echo "SUBNET_ID(2nd): $SUBNET_ID"
 echo "BUCKET: $BUCKET"
 ```
 
