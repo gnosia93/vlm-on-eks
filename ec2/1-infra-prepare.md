@@ -687,7 +687,7 @@ image, command, args, resources(GPU/EFA 개수), numNodes, env
 volumes, volumeMounts, nodeSelector, tolerations, serviceAccount, securityContext, labels, annotations
 이 API는 예전의 podTemplateOverrides를 대체한 것으로, 여러 주체(사용자·Kueue·admission webhook)가 각자 이름(manager) 아래 패치를 기여하고 이를 병합하는 다중 소유(multi-owner) 모델을 씁니다. 설치된 Trainer 버전에 따라 runtimePatches(신규)일 수도, podTemplateOverrides(구)일 수도 있습니다.
 ```
-* privileged: true 는 호스트 시스템의 모든 리소스(디바이스)와 커널 기능에 대한 완전한 접근 권한을 부여하는 설정이다.
+* privileged: true 는 호스트 시스템의 모든 리소스(디바이스)와 커널 기능에 대한 완전한 접근 권한을 부여하는 설정이다.(보안상 이 설정은 하지 말아야 한다)
 
 
 > [!NOTE]
