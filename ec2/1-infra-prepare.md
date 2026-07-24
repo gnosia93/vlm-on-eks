@@ -520,8 +520,6 @@ Wed Dec 10 06:44:46 2025
 |  No running processes found                                                             |
 +-----------------------------------------------------------------------------------------+
 ```
-eks-node-viewer 로 신규 이스턴스가 프로비저닝 된것을 확인한다.
-![](https://github.com/gnosia93/training-on-eks/blob/main/chapter/images/eks-node-viewer.png)
 
 
 
