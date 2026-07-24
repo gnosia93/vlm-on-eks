@@ -10,8 +10,6 @@ VLM이므로, 이 부분은 zero-shot으로 직접 확인해봐야 한다.
 
 ### zero-shot 테스트 ###
 
-
-실행
 ```
 docker run --rm -it --gpus all --shm-size=16g \
   -v $(pwd):/work -w /work \
