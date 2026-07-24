@@ -328,6 +328,16 @@ aws s3 cp "s3://vlm-data-499514681453-ap-northeast-2/finevideo/sports/09buIj5Z5l
 }
 ```
 
+[! INFORMATION]
+> 파일명 042dd539417d 생성 규칙
+> ```
+> run_id = hashlib.sha256(
+      f"{prompt}|{MODEL}|{sampling_config_hash}".encode()
+  ).hexdigest()[:12]
+> 프롬프트 | 모델 | 프레임해시 를 이어붙여 SHA-256 → 앞 12자리. 
+> ```
+
+
 ## TODO ##
 
 * s3 에 저장된 전체 목록에 대해서 병렬로 배치 인퍼런스 하는 코드 작성 -> 필요한 경우 k8s job 으로 실행.
