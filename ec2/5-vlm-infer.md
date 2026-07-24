@@ -129,7 +129,8 @@ docker run --rm -it --gpus all --shm-size=16g \
   s3_infer.py
 ```
 * -v /opt/dlami/nvme/hf-cache:/root/.cache/huggingface 에서 /opt/dlami/nvme/hf-cache 는 호스트 경로이고 /root/.cache/huggingface 는 컨테이너 경로이다. 호스트 경로에 있는 모델 가중치를 컨테이너에서 실행되는 모델에서 읽어간다.    
-* -w /work 작업 디렉토리 ???
+* -v $(pwd):/work 는 s3_infer.py 있는 로컬 디렉토가 컨테이너의 /work 디렉토리에 매핑.
+* -w /work 는 컨테이너 안에서 명령이 실행될 작업 디렉토리(working directory)를 지정하는 옵션.
    
 [결과]
 ```
