@@ -213,14 +213,6 @@ aws s3 cp s3://$BUCKET/finevideo/sports/manifest.jsonl - | jq .
 
 ## 모델 가중치 S3 저장하기 ##
 
-```
-sudo apt update && sudo apt install -y unzip
-curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-aws --version
-```
-
 hf 로 OpenGVLab/InternVL3-78B 모델의 가중치를 다운로드 받고, S3 로 업로드 한다. 
 > [!WARNING]
 > --local-dir flat 다운로드 방식의 특징과 주의점
