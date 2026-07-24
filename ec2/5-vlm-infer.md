@@ -328,7 +328,7 @@ aws s3 cp "s3://vlm-data-499514681453-ap-northeast-2/finevideo/sports/09buIj5Z5l
 }
 ```
 
-[!NOTE]
+> [!NOTE]
 > 파일명 042dd539417d 생성 규칙
 > ```
 > run_id = hashlib.sha256(
