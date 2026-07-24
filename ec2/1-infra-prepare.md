@@ -159,7 +159,7 @@ done
 ```
 
 ### 2. 클러스터 생성 ### 
-클러스터 생성 완료까지 약 20 ~ 30분 정도의 시간이 소요된다.
+클러스터 생성 완료까지 약 20 분 정도의 시간이 소요된다.
 ```
 cat > cluster.yaml <<EOF 
 ---
@@ -214,23 +214,37 @@ eksctl create cluster -f cluster.yaml
 
 [결과]
 ```
-026-02-06 02:51:14 [ℹ]  eksctl version 0.221.0
-2026-02-06 02:51:14 [ℹ]  using region ap-northeast-2
-2026-02-06 02:51:14 [✔]  using existing VPC (vpc-07151864d34430640) and subnets (private:map[ap-northeast-2a:{subnet-09b68fab9521791fb ap-northeast-2a 10.0.10.0/24 0 } ap-northeast-2b:{subnet-08c3050a617b30d0e ap-northeast-2b 10.0.11.0/24 0 }] public:map[])
-2026-02-06 02:51:14 [!]  custom VPC/subnets will be used; if resulting cluster doesn't function as expected, make sure to review the configuration of VPC/subnets
-2026-02-06 02:51:14 [ℹ]  nodegroup "ng-arm" will use "" [AmazonLinux2023/1.34]
-2026-02-06 02:51:14 [ℹ]  nodegroup "ng-x86" will use "" [AmazonLinux2023/1.34]
-2026-02-06 02:51:14 [!]  Auto Mode will be enabled by default in an upcoming release of eksctl. This means managed node groups and managed networking add-ons will no longer be created by default. To maintain current behavior, explicitly set 'autoModeConfig.enabled: false' in your cluster configuration. Learn more: https://eksctl.io/usage/auto-mode/
-2026-02-06 02:51:14 [ℹ]  using Kubernetes version 1.34
-2026-02-06 02:51:14 [ℹ]  creating EKS cluster "get-started-eks" in "ap-northeast-2" region with managed nodes
-2026-02-06 02:51:14 [ℹ]  2 nodegroups (ng-arm, ng-x86) were included (based on the include/exclude rules)
+2026-07-24 16:13:45 [ℹ]  eksctl version 0.229.0
+2026-07-24 16:13:45 [ℹ]  using region ap-northeast-2
+2026-07-24 16:13:45 [✔]  using existing VPC (vpc-01531b61ba2272a88) and subnets (private:map[ap-northeast-2a:{subnet-0b7d8aceb1614c6fd ap-northeast-2a 10.0.10.0/24 0 } ap-northeast-2b:{subnet-0bfab250da388270c ap-northeast-2b 10.0.11.0/24 0 }] public:map[])
+2026-07-24 16:13:45 [!]  custom VPC/subnets will be used; if resulting cluster doesn't function as expected, make sure to review the configuration of VPC/subnets
+2026-07-24 16:13:45 [ℹ]  nodegroup "ng-x86" will use "" [AmazonLinux2023/1.34]
+2026-07-24 16:13:45 [!]  Auto Mode will be enabled by default in an upcoming release of eksctl. This means managed node groups and managed networking add-ons will no longer be created by default. To maintain current behavior, explicitly set 'autoModeConfig.enabled: false' in your cluster configuration. Learn more: https://eksctl.io/usage/auto-mode/
+2026-07-24 16:13:45 [ℹ]  using Kubernetes version 1.34
+2026-07-24 16:13:45 [ℹ]  creating EKS cluster "vlm-distillation" in "ap-northeast-2" region with managed nodes
+2026-07-24 16:13:45 [ℹ]  1 nodegroup (ng-x86) was included (based on the include/exclude rules)
+2026-07-24 16:13:45 [ℹ]  will create a CloudFormation stack for cluster itself and 1 managed nodegroup stack(s)
+2026-07-24 16:13:45 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=ap-northeast-2 --cluster=vlm-distillation'
+2026-07-24 16:13:45 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "vlm-distillation" in "ap-northeast-2"
+2026-07-24 16:13:45 [ℹ]  CloudWatch logging will not be enabled for cluster "vlm-distillation" in "ap-northeast-2"
+2026-07-24 16:13:45 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=ap-northeast-2 --cluster=vlm-distillation'
+2026-07-24 16:13:45 [ℹ]  
+2 sequential tasks: { create cluster control plane "vlm-distillation", 
+    2 sequential sub-tasks: { 
+        5 sequential sub-tasks: { 
+            1 task: { create addons },
+            wait for control plane to become ready,
+            associate IAM OIDC provider,
+            no tasks,
+            update VPC CNI to use IRSA if required,
+        },
+        create managed nodegroup "ng-x86",
+    } 
+}
+2026-07-24 16:13:45 [ℹ]  building cluster stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:13:45 [ℹ]  deploying stack "eksctl-vlm-distillation-cluster"
+2026-07-24 16:14:15 [ℹ]  waiting for CloudFormation stack "eksctl-vlm-distillation-cluster"
 ...
-2026-02-06 03:11:52 [ℹ]  created namespace "karpenter"
-2026-02-06 03:11:52 [ℹ]  created serviceaccount "karpenter/karpenter"
-2026-02-06 03:11:52 [ℹ]  adding identity "arn:aws:iam::499514681453:role/eksctl-KarpenterNodeRole-get-started-eks" to auth ConfigMap
-2026-02-06 03:11:52 [ℹ]  adding Karpenter to cluster get-started-eks
-2026-02-06 03:12:12 [ℹ]  kubectl command should work with "/home/ec2-user/.kube/config", try 'kubectl get nodes'
-2026-02-06 03:12:12 [✔]  EKS cluster "get-started-eks" in "ap-northeast-2" region is ready
 ```
 
 EKS 에서 클러스터 시큐리티 그룹은 컨트롤 플레인과 워커노드 사이의 통신을 가능하게 한다. 컨트롤 플레인은 10250 포트를 통해 노드의 큐블렛과 통신하고 워커노드는 443 포트를 이용하여 컨트롤 플레인의 API 서버에 접근을 시도한다. 아래 명령어는 클러스터 시큐리티 그룹에 "karpenter.sh/discovery=${CLUSTER_NAME}" 태크가 존재하는지 확인하는 스크립트이다. 카펜터가 노드를 생성할때, 이와 동일한 태크를 가진 시큐리티 그룹을 찾아 신규 노드에 할당하게 된다. 시큐리티 그룹 검색에 실패하게 되는 경우, EC2 인스턴스는 생성되지만 EKS 클러스터에 조인하지 못한다.  
