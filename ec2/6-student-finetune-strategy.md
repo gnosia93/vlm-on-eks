@@ -30,8 +30,16 @@ NVIDIA L40S * 8
 ### 2. zero-shot 테스트 ###
 
 ```
-cd ~/vlm-distillation/src
+export REGION=ap-northeast-2
+export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
+VIDEO_ID=$(aws s3 ls $BUCKET/finevideo/sports/ 2>/dev/null | head -n1 | awk '{print $NF}' | tr -d '/')
 
+echo "\n-------------------------------------"
+echo "BUCKET: $BUCKET"
+echo "VIDEO_ID: $VIDEO_ID"
+
+cd ~/vlm-distillation/src
 docker run --rm -it --gpus all --shm-size=16g \
   -v $(pwd):/work -w /work \
   -v /opt/dlami/nvme/hf-cache/models:/models \
