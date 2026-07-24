@@ -111,7 +111,7 @@ source ~/.bashrc
 ```
 go 컴파일 과정에서 다소 시간이 소요된다.
 
-### EKS 클러스터 생성하기 ###
+### 클러스터 설치하기 ###
 
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
@@ -130,7 +130,7 @@ echo "KARPENTER_VERSION: $KARPENTER_VERSION"
 echo "VPC_ID: $VPC_ID"
 ```
 
-### 1. 서브넷 식별 ###
+#### 1. 서브넷 식별 ####
 클러스터의 데이터 플레인(워커노드 들)은 아래의 프라이빗 서브넷에 위치하게 된다. 
 ```
 aws ec2 describe-subnets \
@@ -158,7 +158,7 @@ do
 done
 ```
 
-### 2. 클러스터 생성 ### 
+#### 2. 클러스터 생성 #### 
 클러스터 생성 완료까지 약 20 분 정도의 시간이 소요된다.
 ```
 cat > cluster.yaml <<EOF 
@@ -276,7 +276,7 @@ aws ec2 describe-security-groups \
 +----------------------------------------+---------------------------------------------+
 ```
 
-### 3. 추가 정책 설정 ###
+#### 3. 추가 정책 설정 ####
 클러스터 생성이 완료되면 추가 설정이 필요하다. 카펜터 버전 1.8.1(EKS 1.3.4) 에는 아래와 같은 정책 설정이 누락되어 있어 패치가 필요하다. 
 패치를 하지 않는 경우 카펜터가 프러비저닝한 노드가 클러스터에 조인되지 않는다. (노드 describe 시 Not Ready 상태)  
 
@@ -316,5 +316,8 @@ aws iam put-role-policy \
     --policy-document "$POLICY_JSON"
 ```
 
+### GPU / EFA 설정 ###
+
+### 카펜터 노드풀 설정 ###
 
 
