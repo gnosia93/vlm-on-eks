@@ -97,7 +97,7 @@ sudo chown ubuntu:ubuntu /opt/dlami/nvme/hf-cache
 echo -e "\n-------------------------------------"
 echo "BUCKET: [ $BUCKET ]"
 
-aws s3 sync s3://${BUCKET}/models/internvl3-78b/ /opt/dlami/nvme/hf-cache/models/internvl3-78b/
+s5cmd --numworkers 8 sync "s3://${BUCKET}/models/internvl3-78b/*" /opt/dlami/nvme/hf-cache/models/internvl3-78b/
 ```
 
 ### 4. 인퍼런스 하기 ###
