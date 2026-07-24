@@ -333,8 +333,8 @@ aws ec2 describe-security-groups \
 ```
 
 #### 3. 추가 정책 설정 ####
-클러스터 생성이 완료되면 추가 설정이 필요하다. 카펜터 버전 1.8.1(EKS 1.3.4) 에는 아래와 같은 정책 설정이 누락되어 있어 패치가 필요하다. 
-패치를 하지 않는 경우 카펜터가 프러비저닝한 노드가 클러스터에 조인되지 않는다. (노드 describe 시 Not Ready 상태)  
+
+클러스터 생성이 완료되면 추가 설정이 필요하다. eksctl로 프로비저닝한 Karpenter 컨트롤러 IAM 역할(eksctl-${CLUSTER_NAME}-iamservice-role)에 일부 권한이 누락되어 있어 패치가 필요하다. 구체적으로는 EKS 클러스터 엔드포인트 탐색용 eks:DescribeCluster와, Karpenter가 노드용 인스턴스 프로파일을 생성·관리하는 데 필요한 iam:*InstanceProfile 계열 권한이 빠져 있다. 이 권한들이 없으면 Karpenter가 프로비저닝한 노드가 부트스트랩·인증에 실패해 클러스터에 조인되지 못한다(노드 describe 시 NotReady 상태). 이는 Karpenter 자체의 문제가 아니라 eksctl이 컨트롤러 역할에 최신 요구 권한을 모두 부여하지 않은 데서 비롯된 이슈다.
 
 * eksctl-vlm-distillation-iamservice-role 에 정책 추가(OIDC 정책 누락)
 ```
@@ -521,7 +521,7 @@ Wed Dec 10 06:44:46 2025
 +-----------------------------------------------------------------------------------------+
 ```
 
-## EFA ##
+## EFA 활성화 ##
 
 ### 1. EFA 플러그인 설치 ###
 ```
