@@ -583,6 +583,62 @@ aws ec2 describe-instance-types \
 ```
 
 
+## 큐브플로우 Trainer 설치 ##
+```
+sudo dnf install git -y
+export VERSION=v2.1.0
+kubectl apply --server-side -k "https://github.com/kubeflow/trainer.git/manifests/overlays/manager?ref=${VERSION}"
+```
+10 초 정도 지나후에 클러스터 트레이닝런타임을 설치한다. 
+```
+kubectl apply --server-side -k "https://github.com/kubeflow/trainer.git/manifests/overlays/runtimes?ref=${VERSION}"
+kubectl get clustertrainingruntimes
+```
+[결과]
+```
+NAME                     AGE
+deepspeed-distributed    9s
+mlx-distributed          9s
+torch-distributed        9s
+torchtune-llama3.2-1b    9s
+torchtune-llama3.2-3b    9s
+torchtune-qwen2.5-1.5b   9s
+```
+
+* efa 관련 설정을 추가하기 위해 torch-distributed 런타임을 수정한다. 
+```
+$ kubectl edit clustertrainingruntime torch-distributed 
+
+apiVersion: trainer.kubeflow.org/v1alpha1
+kind: ClusterTrainingRuntime
+metadata:
+  name: torch-distributed
+spec:
+  template:
+    spec:
+      shareProcessNamespace: true           # 추가 
+      hostIPC: true                         # 추가
+      containers:
+        - name: node
+          # EFA 및 분산 학습을 위한 보안 설정 추가
+          securityContext:
+            privileged: true                 # 호스트 시스템의 모든 리소스(디바이스)와 커널 기능에 대한 완전한 접근 권한을 부여하는 설정
+            capabilities:
+              add: ["IPC_LOCK"]
+```
+아래 명령어로 제대로 수정되었는지 확인한다.
+```
+kubectl get clustertrainingruntime torch-distributed -o yaml
+```
+
+> [!NOTE]
+> trainjob 명령어
+> * 잡 확인 - kubectl get trainjob                       
+> * 잡 삭제 - kubectl delete trainjob llama-3-8b        
+> * 잡 상세 - kubectl describe trainjob llama-3-8b
+    
+
+
 
 
 
