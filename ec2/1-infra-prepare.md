@@ -25,6 +25,10 @@ aws cloudformation create-stack \
 ```
 vpc 생성 진행 과정을 조회하고 완료될때 까지 대기한다. 
 ```
+aws cloudformation wait stack-update-complete \
+  --stack-name ${CF_STACK} \
+  --region ${AWS_REGION}
+
 aws cloudformation describe-stacks --stack-name ${CF_STACK} \
 --region $AWS_REGION \
 --query "Stacks[0].StackStatus"
