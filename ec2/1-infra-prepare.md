@@ -23,15 +23,15 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_NAMED_IAM \
   --tags Key=Project,Value=vlm-distillation
 ```
-vpc 생성이 완료될때 까지 대기한 후 완료 여부를 출력한다.  
+vpc 생성이 완료될때 까지 대기한다. 
 ```
-aws cloudformation wait stack-update-complete \
-  --stack-name ${CF_STACK} \
-  --region ${AWS_REGION}
-
 aws cloudformation describe-stacks --stack-name ${CF_STACK} \
 --region $AWS_REGION \
 --query "Stacks[0].StackStatus"
+```
+[결과]
+```
+"CREATE_COMPLETE"
 ```
 
 vs-code 웹 URL 을 출력한다. 
