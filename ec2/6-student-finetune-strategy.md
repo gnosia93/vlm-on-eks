@@ -116,19 +116,6 @@ LoRA를 권하는 이유:
 - student가 크리켓을 야구로 착각하거나, 스코어보드를 못 읽거나, temporal에서 프레임을 뒤섞어 순서가 엉켰다면 → 이해 자체가 안 되는 것 → Full 고려.
 - 지금은 그 반대예요. 이해는 하는데 표현만 안 맞음.
 
-## 인스턴스 삭제 ##
 
-> [!WARNING]
-> GPU 인스턴스는 가용 수량이 제한적이고 시간당 비용도 비싸다.
-> 다음 단계로 넘어가기 전에 **반드시 삭제**한다.
-
-ubuntu GPU 인스턴스에서 exit 명령어를 두번 수행하셔 vs-code ec2 인스턴스로 돌아온 다음 (프롬프트는 x86_64 이다), GPU 인스턴스를 삭제한다. 
-```
-echo -e "\n-------------------------------------"
-echo "INSTANCE: [ $INSTANCE ]"
-echo "REGION: [ $REGION ]"
-
-aws ec2 terminate-instances --instance-ids $INSTANCE --region $REGION
-```
 
 
