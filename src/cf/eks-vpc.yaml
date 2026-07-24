@@ -258,11 +258,13 @@ Resources:
               - "autoscaling:DescribeTags"
               - "ssm:GetParameter"
               - "ssm:DescribeInstanceInformation"
+              - "ssm:DescribeSessions"
               - "ssm:StartSession"
               - "ssm:TerminateSession"
               - "ssm:ResumeSession"
               - "ssm:SendCommand"
               - "ssm:GetCommandInvocation"
+              - "ssm:GetConnectionStatus"
               - "ssm:ListCommandInvocations"
             Resource: "*"
           - Sid: KarpenterInfrastructure
