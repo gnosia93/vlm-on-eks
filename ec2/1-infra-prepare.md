@@ -53,7 +53,7 @@ echo ${OUTPUT}
 ]
 ```
 
-## EKS 클러스터 생성 ##
+## EKS 프로비저닝 ##
 
 vs-code 서버에 웹으로 접속한 후, 터미널을 열어 kubectl, eksctl, helm 을 설치한다. (vs-code 패스워드는 code!@#c 이다)
 ![](https://github.com/gnosia93/training-on-eks/blob/main/chapter/images/code-server.png)
@@ -111,7 +111,7 @@ source ~/.bashrc
 ```
 go 컴파일 과정에서 다소 시간이 소요된다.
 
-## EKS 클러스터 생성하기 ##
+### EKS 클러스터 생성하기 ###
 
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
