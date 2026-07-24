@@ -94,12 +94,8 @@ ls -ld /opt/dlami/nvme
 sudo mkdir -p /opt/dlami/nvme/hf-cache
 sudo chown ubuntu:ubuntu /opt/dlami/nvme/hf-cache
 
-export REGION=ap-northeast-2
-export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-export BUCKET=vlm-data-${ACCOUNT_ID}-${REGION}
-
-echo "\n-------------------------------------"
-echo "BUCKET: $BUCKET"
+echo -e "\n-------------------------------------"
+echo "BUCKET: [ $BUCKET ]"
 
 aws s3 sync s3://${BUCKET}/models/internvl3-78b/ /opt/dlami/nvme/hf-cache/models/internvl3-78b/
 ```
