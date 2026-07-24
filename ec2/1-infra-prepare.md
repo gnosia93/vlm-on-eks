@@ -53,7 +53,4 @@ echo ${OUTPUT}
 ]
 ```
 
-## vpc 삭제하기 ##
-```
-aws cloudformation delete-stack --stack-name ${CF_STACK} --region $AWS_REGION
-```
+
