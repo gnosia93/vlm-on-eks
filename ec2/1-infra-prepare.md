@@ -23,7 +23,9 @@ aws cloudformation create-stack \
 ```
 vpc 생성 진행 과정을 조회하고 완료될때 까지 대기한다. 
 ```
-aws cloudformation describe-stacks --stack-name vlm-distillation --query "Stacks[0].StackStatus"
+aws cloudformation describe-stacks --stack-name vlm-distillation \
+--region $REGION \
+--query "Stacks[0].StackStatus"
 ```
 
 생성 결과를 출력한다. 
