@@ -30,6 +30,8 @@ NVIDIA L40S * 8
 ### 2. zero-shot 테스트 ###
 
 ```
+cd ~/vlm-distillation/src
+
 docker run --rm -it --gpus all --shm-size=16g \
   -v $(pwd):/work -w /work \
   -v /opt/dlami/nvme/hf-cache/models:/models \
