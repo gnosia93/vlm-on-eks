@@ -637,8 +637,9 @@ torchtune-qwen2.5-1.5b   9s
 
 * efa 관련 설정을 추가하기 위해 torch-distributed 런타임을 수정한다. 
 ```
-$ kubectl edit clustertrainingruntime torch-distributed 
-
+kubectl edit clustertrainingruntime torch-distributed 
+```
+```
 apiVersion: trainer.kubeflow.org/v1alpha1
 kind: ClusterTrainingRuntime
 metadata:
@@ -646,19 +647,41 @@ metadata:
 spec:
   template:
     spec:
-      shareProcessNamespace: true           # 추가 
-      hostIPC: true                         # 추가
+      # ❌ shareProcessNamespace: true   → 제거 (사이드카/디버깅용, 학습엔 불필요)
+      # ❌ hostIPC: true                 → 제거 (아래 /dev/shm emptyDir로 대체)
       containers:
         - name: node
-          # EFA 및 분산 학습을 위한 보안 설정 추가
           securityContext:
-            privileged: true                 # 호스트 시스템의 모든 리소스(디바이스)와 커널 기능에 대한 완전한 접근 권한을 부여하는 설정
+            # ❌ privileged: true        → 제거 (EFA device plugin으로 대체)
             capabilities:
-              add: ["IPC_LOCK"]
+              add: ["IPC_LOCK"]          # ✅ 유지 - RDMA 메모리 핀(필수)
+          resources:
+            limits:
+              vpc.amazonaws.com/efa: 1   # ✅ EFA 디바이스를 플러그인으로 노출
+              nvidia.com/gpu: 8          # 인스턴스 GPU 수에 맞게
+            requests:
+              vpc.amazonaws.com/efa: 1
+              nvidia.com/gpu: 8
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm        # ✅ NCCL 공유메모리
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory               # 호스트 IPC 대신 메모리 볼륨
+            sizeLimit: 16Gi              # 모델/배치에 맞게 조정
+
 ```
-아래 명령어로 제대로 수정되었는지 확인한다.
+* privileged: true 는 호스트 시스템의 모든 리소스(디바이스)와 커널 기능에 대한 완전한 접근 권한을 부여하는 설정이다.
+* 덮어쓰는 두 가지 경로 (중요)
 ```
-kubectl get clustertrainingruntime torch-distributed -o yaml
+① spec.trainer (Trainer API) — node(trainer) 컨테이너의 핵심 값
+image, command, args, resources(GPU/EFA 개수), numNodes, env
+이건 반드시 Trainer API로만 덮어써야 함
+
+② spec.runtimePatches (RuntimePatches API) — 그 외 파드/컨테이너 스펙
+volumes, volumeMounts, nodeSelector, tolerations, serviceAccount, securityContext, 라벨/어노테이션 등
+(예전 podTemplateOverrides를 대체한 새 API. 설치 버전에 따라 이름이 다를 수 있음)
 ```
 
 > [!NOTE]
