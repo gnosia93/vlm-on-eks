@@ -98,6 +98,61 @@ aws s3 cp "s3://${BUCKET}/finevideo/sports/manifest.jsonl" - \
 * -P 8 → 동시에 8개 프로세스 (코어 수에 맞춰 조정)
 * -I {} → video_id를 {} 자리에 넣어 호출
 
+S3 에 저장된 샘플링 결과를 확이한다. (첫번째 VIDEO_ID 하나에 대해서만 상세하게 출력)
+```
+VIDEO_ID=$(aws s3 ls $BUCKET/finevideo/sports/ 2>/dev/null | head -n 1 | awk '{print $NF}')
+aws s3 ls $BUCKET/finevideo/sports/$VIDEO_ID --recursive
+aws s3 cp "s3://$BUCKET/finevideo/sports/${VIDEO_ID}frames/frames.json" - | jq
+```
+[결과]
+````
+2026-07-23 23:55:39      12582 finevideo/sports/09buIj5Z5lk/frames/frame_001.jpg
+2026-07-23 23:55:39      15666 finevideo/sports/09buIj5Z5lk/frames/frame_002.jpg
+2026-07-23 23:55:39      16747 finevideo/sports/09buIj5Z5lk/frames/frame_003.jpg
+2026-07-23 23:55:39      31335 finevideo/sports/09buIj5Z5lk/frames/frame_004.jpg
+2026-07-23 23:55:39      13958 finevideo/sports/09buIj5Z5lk/frames/frame_005.jpg
+2026-07-23 23:55:39      24075 finevideo/sports/09buIj5Z5lk/frames/frame_006.jpg
+2026-07-23 23:55:39      24990 finevideo/sports/09buIj5Z5lk/frames/frame_007.jpg
+2026-07-23 23:55:39      15231 finevideo/sports/09buIj5Z5lk/frames/frame_008.jpg
+2026-07-23 23:55:39      41572 finevideo/sports/09buIj5Z5lk/frames/frame_009.jpg
+2026-07-23 23:55:39      35491 finevideo/sports/09buIj5Z5lk/frames/frame_010.jpg
+2026-07-23 23:55:39      32052 finevideo/sports/09buIj5Z5lk/frames/frame_011.jpg
+2026-07-23 23:55:39      18882 finevideo/sports/09buIj5Z5lk/frames/frame_012.jpg
+2026-07-23 23:55:39      34502 finevideo/sports/09buIj5Z5lk/frames/frame_013.jpg
+2026-07-23 23:55:39      18083 finevideo/sports/09buIj5Z5lk/frames/frame_014.jpg
+2026-07-23 23:55:39      17107 finevideo/sports/09buIj5Z5lk/frames/frame_015.jpg
+2026-07-23 23:55:39      21425 finevideo/sports/09buIj5Z5lk/frames/frame_016.jpg
+2026-07-23 23:55:39       1095 finevideo/sports/09buIj5Z5lk/frames/frames.json
+2026-07-22 16:18:31      11157 finevideo/sports/09buIj5Z5lk/metadata.json
+2026-07-22 16:18:31    4032992 finevideo/sports/09buIj5Z5lk/video.mp4
+{
+  "video_id": "09buIj5Z5lk",
+  "num_frames": 16,
+  "sampling": "uniform",
+  "frame_size": "448x448",
+  "source_duration": 62,
+  "frames": [
+    "finevideo/sports/09buIj5Z5lk/frames/frame_001.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_002.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_003.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_004.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_005.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_006.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_007.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_008.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_009.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_010.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_011.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_012.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_013.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_014.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_015.jpg",
+    "finevideo/sports/09buIj5Z5lk/frames/frame_016.jpg"
+  ],
+  "sampling_config_hash": "d587a6"
+}
+````
+
 > [!NOTE]
 > EKS에서는 이 스크립트를 컨테이너로 감싸 Graviton 노드풀의 K8s Job으로 돌리고, manifest.jsonl의 각 줄(video_id)을 여러 Job에 나눠 병렬 처리하면 됩니다.
 > ```
