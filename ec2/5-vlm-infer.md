@@ -55,7 +55,7 @@ aws ec2 run-instances \
   --security-group-ids $SG_ID \
   --subnet-id $SUBNET_ID \
   --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":600,"VolumeType":"gp3","Throughput":500,"Iops":6000,"DeleteOnTermination":true}}]' \
-  --iam-instance-profile Name=vlm-ec2-profile \
+  --iam-instance-profile Name=VlmEKS_Profile \
   --instance-initiated-shutdown-behavior terminate \
   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=model-infer}]' \
   --count 1
