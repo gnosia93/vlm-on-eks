@@ -1,0 +1,9 @@
+torch>=2.1
+torchvision
+transformers>=4.37.2,<4.46
+peft>=0.11
+accelerate>=0.30
+timm
+einops
+sentencepiece
+pillow
