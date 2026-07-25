@@ -8,18 +8,6 @@
 - question — 티처에게 준 프롬프트 (학습 시 loss 마스킹).
 - answer — 티처가 생성한 응답 = student의 학습 정답 (이 부분만 loss 계산).
 
-[data/train.jsonl 예시]
-```
-{"frames": ["data/frames/vid001/f00.jpg", "data/frames/vid001/f01.jpg", "data/frames/vid001/f02.jpg", "...(총 16개)...",
-"data/frames/vid001/f15.jpg"], "question": "이 영상에서 무슨 일이 일어나는지 설명해줘.", "answer": "한 남성이 주방에서 재료를
-썰어 팬에 볶은 뒤 접시에 담습니다."}
-{"frames": ["data/frames/vid002/f00.jpg", "data/frames/vid002/f01.jpg", "...(총 16개)...", "data/frames/vid002/f15.jpg"],
-"question": "영상 속 인물이 무엇을 하고 있나요?", "answer": "여성이 공원 벤치에 앉아 노트북으로 작업을 하다가 커피를
-마십니다."}
-{"frames": ["data/frames/vid003/f00.jpg", "data/frames/vid003/f01.jpg", "...(총 16개)...", "data/frames/vid003/f15.jpg"],
-"question": "이 장면의 배경은 어디인가요?", "answer": "해변가로, 파도가 치는 모래사장에서 두 사람이 배구를 하고 있습니다."}
-...
-```
 
 ### 2. 비디오 프레임 전처리 ###
 
