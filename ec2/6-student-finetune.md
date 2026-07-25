@@ -1,5 +1,7 @@
 ## Student 모델 파인튜닝 ##
 
+Teacher 모델로는 InternVL3-78B 를 사용하고, student 모델로는 같은 계열의 InternVL3-1B를 사용한다. 
+Teacher teacher 라벨링 결과 (인프런스 결과) 기반으로 student 모델은 LoRA 파인 튜닝한다.
 
 ### 1. 학습 데이터의 이해  ###
 
