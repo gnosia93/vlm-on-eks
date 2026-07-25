@@ -1,16 +1,9 @@
 ## Student 모델 파인튜닝 ##
 
-### 1. 학습 데이터의 이해 ###
 
-학습데이터는 JSONL 형식으로, 한 줄이 하나의 영상 데이터를 의미하며 16개의 프레임(frames), 질문(question), **답변(answer)**으로 구성된다.
-이 데이터는 티처 모델(InternVL3-78B)의 인퍼런스 결과로부터 만들어낸 지식 증류(distillation) 데이터이다.
-- frames — 영상에서 균등 샘플링한 16개 프레임 경로. 배열 순서가 곧 시간 순서다.
-- question — 티처에게 준 프롬프트 (학습 시 loss 마스킹).
-- answer — 티처가 생성한 응답 = student의 학습 정답 (이 부분만 loss 계산).
+### 1. 학습 데이터의 이해  ###
 
-### 훈련 데이터 구조 ###
-
-* 훈련 데이터 위치
+* 학습 데이터 위치
 ```
 $ aws s3 cp s3://vlm-data-499514681453-ap-northeast-2/finevideo/sports/manifest.jsonl - | jq .
 {
